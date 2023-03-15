@@ -23,7 +23,7 @@ func NewProduct(name string, creationDate time.Time, quantity int, expirationDat
 	}
 }
 
-func (p *Product) isValid() (bool, error) {
+func (p *Product) IsValid() (bool, error) {
 	if p.Quantity < 1 || p.Quantity > 32767 {
 		return false, ErrInvalidQuantity
 	}

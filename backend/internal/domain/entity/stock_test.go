@@ -66,7 +66,7 @@ func TestEntity(t *testing.T) {
 	for _, tt := range scenarios {
 		t.Run(tt.name, func(t *testing.T) {
 			prd := NewProduct(tt.product, tt.creationDate, tt.quantity, tt.expirationDate)
-			ok, err := prd.isValid()
+			ok, err := prd.IsValid()
 			assert.NotNil(t, prd.ID)
 			assert.Equal(t, tt.expectedErr, err)
 			assert.Equal(t, tt.isShouldBeOk, ok)
