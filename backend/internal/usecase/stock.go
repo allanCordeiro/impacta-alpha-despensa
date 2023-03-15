@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
 	"time"
@@ -14,13 +13,13 @@ type CreateProductInput struct {
 	ExpirationDate string `json:"expiration_date"`
 }
 
-type CreateProductOutput struct {
-	Msgs []Msg
+type Msg struct {
+	Entity string
+	Err    error
 }
 
-type Msg struct {
-	Entity         string
-	ErrDescription string
+type CreateProductOutput struct {
+	Msgs []Msg
 }
 
 type CreateProductUseCase struct {
@@ -34,23 +33,38 @@ func NewCreateProductUseCase(stockGateway gateway.StockGateway) *CreateProductUs
 }
 
 func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOutput {
+	errors := CreateProductOutput{}
 	creationDate, err := dateParse(input.CreationDate)
 	if err != nil {
-		fmt.Println(err)
+		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidCreationDate}
+		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
+
 	expirationDate, err := dateParse(input.ExpirationDate)
 	if err != nil {
-		fmt.Println(err)
+		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidExpirationDate}
+		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
+	if !errors.shouldProceed() {
+		return errors
+	}
+
 	prd := entity.NewProduct(input.Name, creationDate, input.Quantity, expirationDate)
-	if ok, err := prd.IsValid(); ok {
-		fmt.Println(err)
+	if ok, err := prd.IsValid(); !ok {
+		errorMsg := Msg{Entity: "stock", Err: err}
+		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
+
+	if !errors.shouldProceed() {
+		return errors
+	}
+
 	err = p.StockGateway.Save(prd)
 	if err != nil {
-		fmt.Println(err)
+		errorMsg := Msg{Entity: "internal", Err: err}
+		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
-	return CreateProductOutput{}
+	return errors
 }
 
 func dateParse(date string) (time.Time, error) {
@@ -59,4 +73,11 @@ func dateParse(date string) (time.Time, error) {
 		return time.Time{}, err
 	}
 	return rightDate, nil
+}
+
+func (e *CreateProductOutput) shouldProceed() bool {
+	if len(e.Msgs) > 0 {
+		return false
+	}
+	return true
 }
