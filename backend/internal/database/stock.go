@@ -17,7 +17,7 @@ func NewStockDb(db *sql.DB) *StockDb {
 
 func (s *StockDb) Save(product *entity.Product) error {
 	stmt, err := s.DB.Prepare(
-		"INSERT INTO stock(id, name, creation_date, quantity, expiration_date) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO stock_products(id, name, creation_date, quantity, expiration_date) VALUES (?, ?, ?, ?, ?)",
 	)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (s *StockDb) Save(product *entity.Product) error {
 
 func (s *StockDb) GetByID(id string) (*entity.Product, error) {
 	product := &entity.Product{}
-	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock WHERE id = ?")
+	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE id = ?")
 	if err != nil {
 		return nil, err
 	}

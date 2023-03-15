@@ -40,7 +40,7 @@ func setupDB() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	_, err = db.Exec("CREATE TABLE stock (id varchar(255), name varchar(255), creation_date date, quantity int, expiration_date date)")
+	_, err = db.Exec("CREATE TABLE stock_products (id varchar(255), name varchar(255), creation_date date, quantity int, expiration_date date)")
 	if err != nil {
 		panic(err)
 	}
@@ -50,5 +50,5 @@ func setupDB() *sql.DB {
 func tearDown(db *sql.DB) {
 	defer db.Close()
 
-	db.Exec("DROP TABLE stock")
+	db.Exec("DROP TABLE stock_products")
 }
