@@ -15,7 +15,7 @@ func NewStockDb(db *sql.DB) *StockDb {
 	}
 }
 
-func (s *StockDb) Save(product entity.Product) error {
+func (s *StockDb) Save(product *entity.Product) error {
 	stmt, err := s.DB.Prepare(
 		"INSERT INTO stock(id, name, creation_date, quantity, expiration_date) VALUES (?, ?, ?, ?, ?)",
 	)

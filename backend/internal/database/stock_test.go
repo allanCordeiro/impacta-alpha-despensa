@@ -22,7 +22,7 @@ func TestNewStockDb(t *testing.T) {
 		prdOk, err := product.IsValid()
 		assert.Nil(t, err)
 		assert.True(t, prdOk)
-		err = clientDB.Save(*product)
+		err = clientDB.Save(product)
 		assert.Nil(t, err)
 
 		receivedPrd, err := clientDB.GetByID(product.ID)
