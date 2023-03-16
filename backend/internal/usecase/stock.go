@@ -14,12 +14,12 @@ type CreateProductInput struct {
 }
 
 type Msg struct {
-	Entity string
-	Err    error
+	Entity string `json:"entity"`
+	Err    string `json:"err"`
 }
 
 type CreateProductOutput struct {
-	Msgs []Msg
+	Msgs []Msg `json:"errors"`
 }
 
 type CreateProductUseCase struct {
@@ -36,13 +36,13 @@ func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOu
 	errors := CreateProductOutput{}
 	creationDate, err := dateParse(input.CreationDate)
 	if err != nil {
-		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidCreationDate}
+		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidCreationDate.Error()}
 		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
 
 	expirationDate, err := dateParse(input.ExpirationDate)
 	if err != nil {
-		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidExpirationDate}
+		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidExpirationDate.Error()}
 		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
 	if !errors.shouldProceed() {
@@ -51,7 +51,7 @@ func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOu
 
 	prd := entity.NewProduct(input.Name, creationDate, input.Quantity, expirationDate)
 	if ok, err := prd.IsValid(); !ok {
-		errorMsg := Msg{Entity: "stock", Err: err}
+		errorMsg := Msg{Entity: "stock", Err: err.Error()}
 		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
 
@@ -61,7 +61,7 @@ func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOu
 
 	err = p.StockGateway.Save(prd)
 	if err != nil {
-		errorMsg := Msg{Entity: "internal", Err: err}
+		errorMsg := Msg{Entity: "internal", Err: err.Error()}
 		errors.Msgs = append(errors.Msgs, errorMsg)
 	}
 	return errors

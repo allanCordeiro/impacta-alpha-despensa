@@ -17,7 +17,7 @@ func NewStockDb(db *sql.DB) *StockDb {
 
 func (s *StockDb) Save(product *entity.Product) error {
 	stmt, err := s.DB.Prepare(
-		"INSERT INTO stock_products(id, name, creation_date, quantity, expiration_date) VALUES (?, ?, ?, ?, ?)",
+		"INSERT INTO stock_products(id, name, creation_date, quantity, expiration_date) VALUES ($1, $2, $3, $4, $5)",
 	)
 	if err != nil {
 		return err

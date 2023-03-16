@@ -104,7 +104,7 @@ func TestCreateProductUseCase_Execute(t *testing.T) {
 			output := uc.Execute(input)
 			assert.Equal(t, tt.expectedErrNumber, len(output.Msgs))
 			for _, errMsg := range output.Msgs {
-				assert.Equal(t, tt.expectedErr, errMsg.Err)
+				assert.Equal(t, tt.expectedErr.Error(), errMsg.Err)
 			}
 			m.AssertExpectations(t)
 			m.AssertNumberOfCalls(t, "Save", 1)
@@ -126,7 +126,7 @@ func TestCreateProductUseCase_Execute(t *testing.T) {
 		assert.NotNil(t, output.Msgs)
 		for _, errMsg := range output.Msgs {
 			assert.Equal(t, "internal", errMsg.Entity)
-			assert.Equal(t, "sql: database is closed", errMsg.Err.Error())
+			assert.Equal(t, "sql: database is closed", errMsg.Err)
 		}
 		m.AssertExpectations(t)
 		m.AssertNumberOfCalls(t, "Save", 1)
