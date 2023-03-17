@@ -50,11 +50,14 @@ func main() {
 }
 
 func getEnvConfig(config string) string {
-	err := gotenv.Load(".env")
-	if err != nil {
-		panic(".env file not found.")
-	}
 	envVar := os.Getenv(config)
+	if envVar == "" {
+		err := gotenv.Load(".env")
+		if err != nil {
+			panic(".env file not found.")
+		}
+		envVar = os.Getenv(config)
+	}
 	if config == "" {
 		panic("environment config not found")
 	}
