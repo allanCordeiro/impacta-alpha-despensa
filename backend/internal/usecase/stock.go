@@ -34,6 +34,10 @@ func NewCreateProductUseCase(stockGateway gateway.StockGateway) *CreateProductUs
 
 func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOutput {
 	errors := CreateProductOutput{}
+	if !isInputValid(input) {
+		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidStruct.Error()}
+		errors.Msgs = append(errors.Msgs, errorMsg)
+	}
 	creationDate, err := dateParse(input.CreationDate)
 	if err != nil {
 		errorMsg := Msg{Entity: "stock", Err: entity.ErrInvalidCreationDate.Error()}
@@ -77,6 +81,16 @@ func dateParse(date string) (time.Time, error) {
 
 func (e *CreateProductOutput) shouldProceed() bool {
 	if len(e.Msgs) > 0 {
+		return false
+	}
+	return true
+}
+
+func isInputValid(input CreateProductInput) bool {
+	if len(input.Name) == 0 {
+		return false
+	}
+	if input.CreationDate == "" || input.ExpirationDate == "" {
 		return false
 	}
 	return true
