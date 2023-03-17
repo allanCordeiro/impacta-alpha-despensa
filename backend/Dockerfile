@@ -7,6 +7,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /despensa-be cmd/api/main.
 
 FROM scratch
 COPY --from=builder /despensa-be /despensa-be
+COPY --from=builder /usr/src/app/sql/migrations /sql/migrations
+
 
 EXPOSE 8000
 ENTRYPOINT [ "/despensa-be" ]
