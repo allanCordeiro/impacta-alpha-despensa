@@ -51,3 +51,22 @@ func (s *StockDb) GetByID(id string) (*entity.Product, error) {
 	}
 	return product, nil
 }
+
+func (s *StockDb) GetAllProducts() ([]entity.Product, error) {
+	rows, err := s.DB.Query("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []entity.Product
+	for rows.Next() {
+		var prod entity.Product
+		err = rows.Scan(&prod.ID, &prod.Name, &prod.CreationDate, &prod.Quantity, &prod.ExpirationDate)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, prod)
+	}
+	return products, nil
+}

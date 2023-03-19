@@ -44,6 +44,7 @@ func main() {
 	//handlers
 	r.Route("/api/stock", func(r chi.Router) {
 		r.Post("/", stockHandler.CreateProduct)
+		r.Get("/", stockHandler.GetProducts)
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", r))

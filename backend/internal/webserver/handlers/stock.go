@@ -73,3 +73,12 @@ func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	})
 	return
 }
+
+func (h *StockHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
+	var output []usecase.GetProductOutput
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	uc := usecase.NewGetProductUseCase(h.StockGateway)
+	output = uc.Execute()
+	_ = json.NewEncoder(w).Encode(output)
+}
