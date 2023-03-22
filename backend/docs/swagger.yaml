@@ -1,0 +1,63 @@
+basePath: /
+definitions:
+  handlers.Response:
+    properties:
+      data: {}
+      status:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  usecase.CreateProductInput:
+    properties:
+      creation_date:
+        type: string
+      expiration_date:
+        type: string
+      name:
+        type: string
+      quantity:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: allan.cordeiro.santos@gmail.com
+    name: Allan Cordeiro
+    url: http://www.allancordeiro.com
+  description: Product API with stock management
+  termsOfService: http://www.swagger.io/terms
+  title: Despensa Faculdade Impacta's Project
+  version: "1.0"
+paths:
+  /api/stock:
+    post:
+      consumes:
+      - application/json
+      description: Create a new product and merge it to stock
+      parameters:
+      - description: product information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/usecase.CreateProductInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.Response'
+      summary: Create Product
+      tags:
+      - stock
+swagger: "2.0"
