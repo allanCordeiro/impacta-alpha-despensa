@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	_ "github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers"
@@ -52,6 +53,7 @@ func main() {
 	stockDB := database.NewStockDb(db)
 	stockHandler := handlers.NewStockandler(stockDB)
 
+	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	//handlers
