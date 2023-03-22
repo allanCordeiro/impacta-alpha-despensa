@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	_ "github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers"
 	"github.com/go-chi/chi/middleware"
@@ -10,11 +11,23 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/subosito/gotenv"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
 	"os"
 )
 
+// @title 						Despensa Faculdade Impacta's Project
+// @version 					1.0
+// @description 				Product API with stock management
+// @termsOfService 				http://www.swagger.io/terms
+
+// @contact.name 				Allan Cordeiro
+// @contact.url 				http://www.allancordeiro.com
+// @contact.email 				allan.cordeiro.santos@gmail.com
+
+// @host 						localhost:8000
+// @basePath 					/
 func main() {
 	db, err := sql.Open("postgres", getEnvConfig("DB_URL"))
 	if err != nil {
@@ -46,6 +59,9 @@ func main() {
 		r.Post("/", stockHandler.CreateProduct)
 		r.Get("/", stockHandler.GetProducts)
 	})
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8000/swagger/doc.json")),
+	)
 
 	log.Fatal(http.ListenAndServe(":8000", r))
 }

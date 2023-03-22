@@ -22,6 +22,17 @@ func NewStockandler(db gateway.StockGateway) *StockHandler {
 	return &StockHandler{StockGateway: db}
 }
 
+// CreateProduct godoc
+// @Summary 			Create Product
+// @Description 		Create a new product and merge it to stock
+// @Tags 				stock
+// @Accept 				json
+// @Produce 			json
+// @Param 				request body	usecase.CreateProductInput	true	"product information"
+// @Success 			200	{object}	Response
+// @Failure 			400	{object}	Response
+// @Failure 			500	{object}	Response
+// @Router 				/api/stock [post]
 func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var input usecase.CreateProductInput
 	var output usecase.CreateProductOutput
