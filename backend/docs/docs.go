@@ -22,6 +22,33 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/stock": {
+            "get": {
+                "description": "Get the list of all available products",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stock"
+                ],
+                "summary": "Get Products list",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/usecase.GetProductOutput"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new product and merge it to stock",
                 "consumes": [
@@ -88,6 +115,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "expiration_date": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "usecase.GetProductOutput": {
+            "type": "object",
+            "properties": {
+                "creation_date": {
+                    "type": "string"
+                },
+                "expiration_date": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {
