@@ -10,25 +10,29 @@ import (
 	"time"
 )
 
-type StockGatewayMock struct {
+type StockCreateGatewayMock struct {
 	mock.Mock
 }
 
-func (m *StockGatewayMock) Save(stock *entity.Product) error {
+func (m *StockCreateGatewayMock) Save(stock *entity.Product) error {
 	args := m.Called(stock)
 	return args.Error(0)
 }
 
-func (m *StockGatewayMock) GetProducts() []entity.Product {
+func (m *StockCreateGatewayMock) GetProducts() []entity.Product {
 	return []entity.Product{}
 }
 
-func (m *StockGatewayMock) GetByID(id string) (*entity.Product, error) {
+func (m *StockCreateGatewayMock) GetByID(id string) (*entity.Product, error) {
 	return &entity.Product{}, nil
 }
 
+func (m *StockCreateGatewayMock) GetAllProducts() ([]entity.Product, error) {
+	return []entity.Product{}, nil
+}
+
 func TestCreateProductUseCase_Execute(t *testing.T) {
-	m := &StockGatewayMock{}
+	m := &StockCreateGatewayMock{}
 	brScenarios := []struct {
 		name              string
 		product           string
@@ -112,7 +116,7 @@ func TestCreateProductUseCase_Execute(t *testing.T) {
 	}
 
 	t.Run("given a valid data when execute CreateProductUseCase but an gateway error comes in should return an internal error", func(t *testing.T) {
-		m := &StockGatewayMock{}
+		m := &StockCreateGatewayMock{}
 		m.On("Save", mock.Anything).Return(errors.New("sql: database is closed"))
 		uc := NewCreateProductUseCase(m)
 		input := CreateProductInput{
