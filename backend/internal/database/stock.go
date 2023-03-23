@@ -53,7 +53,7 @@ func (s *StockDb) GetByID(id string) (*entity.Product, error) {
 }
 
 func (s *StockDb) GetAllProducts() ([]entity.Product, error) {
-	rows, err := s.DB.Query("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products")
+	rows, err := s.DB.Query("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE expiration_date >= NOW()")
 	if err != nil {
 		return nil, err
 	}

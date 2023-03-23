@@ -16,7 +16,7 @@ Projeto do grupo `Alpha` da turma do 5o semestre em ADS da Faculdade Impacta.
 WIP
 
 ### Documentação
-WIP
+https://despensa.onrender.com/swagger/
 
 ### Ambiente produtivo
 Para título de apresentação do projeto os endpoints estão disponíveis em https://despensa.onrender.com/api/stock

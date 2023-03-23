@@ -27,6 +27,10 @@ func (m *StockGatewayMock) GetByID(id string) (*entity.Product, error) {
 	return &entity.Product{}, nil
 }
 
+func (m *StockGatewayMock) GetAllProducts() ([]entity.Product, error) {
+	return []entity.Product{}, nil
+}
+
 func TestCreateProductUseCase_Execute(t *testing.T) {
 	m := &StockGatewayMock{}
 	brScenarios := []struct {
