@@ -38,9 +38,9 @@ func (p *GetProductUseCase) Execute() []GetProductOutput {
 		product := &GetProductOutput{
 			ID:             prd.ID,
 			Name:           prd.Name,
-			CreationDate:   prd.CreationDate.String(),
+			CreationDate:   prd.CreationDate.Format("2006-01-02"),
 			Quantity:       prd.Quantity,
-			ExpirationDate: prd.ExpirationDate.String(),
+			ExpirationDate: prd.ExpirationDate.Format("2006-01-02"),
 		}
 		products = append(products, *product)
 	}
