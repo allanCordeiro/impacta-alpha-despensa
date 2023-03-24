@@ -46,6 +46,13 @@ func TestGetProductUseCase_Execute(t *testing.T) {
 			ExpirationDate: time.Now().Add(time.Hour * 24 * 5),
 			Quantity:       2,
 		},
+		{
+			ID:             "3",
+			Name:           "produto vencido",
+			CreationDate:   time.Now(),
+			ExpirationDate: time.Now().Add(-time.Hour * 5),
+			Quantity:       2,
+		},
 	}
 
 	t.Run("Given a request to get products when customer request data should return available data", func(t *testing.T) {
