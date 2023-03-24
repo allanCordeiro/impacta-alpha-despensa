@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
 	"log"
+	"time"
 )
 
 type GetProductInput struct {
@@ -35,14 +36,21 @@ func (p *GetProductUseCase) Execute() []GetProductOutput {
 
 	var products []GetProductOutput
 	for _, prd := range entities {
-		product := &GetProductOutput{
-			ID:             prd.ID,
-			Name:           prd.Name,
-			CreationDate:   prd.CreationDate.String(),
-			Quantity:       prd.Quantity,
-			ExpirationDate: prd.ExpirationDate.String(),
+		var product GetProductOutput
+		if isExpirationDateValid(prd.ExpirationDate) {
+			product = GetProductOutput{
+				ID:             prd.ID,
+				Name:           prd.Name,
+				CreationDate:   prd.CreationDate.Format("2006-01-02"),
+				Quantity:       prd.Quantity,
+				ExpirationDate: prd.ExpirationDate.Format("2006-01-02"),
+			}
+			products = append(products, product)
 		}
-		products = append(products, *product)
 	}
 	return products
+}
+
+func isExpirationDateValid(date time.Time) bool {
+	return date.After(time.Now())
 }

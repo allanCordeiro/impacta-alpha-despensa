@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
@@ -33,6 +34,10 @@ func TestNewStockDb(t *testing.T) {
 		assert.True(t, expectedExpirationDate.Equal(receivedPrd.ExpirationDate))
 	})
 	tearDown(db)
+}
+
+func TestGetStock(t *testing.T) {
+	fmt.Println("teste")
 }
 
 func setupDB() *sql.DB {
