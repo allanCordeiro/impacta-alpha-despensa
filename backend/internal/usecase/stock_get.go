@@ -3,6 +3,7 @@ package usecase
 import (
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -13,7 +14,7 @@ type GetProductOutput struct {
 	ID             string `json:"id"`
 	Name           string `json:"name"`
 	CreationDate   string `json:"creation_date"`
-	Quantity       int    `json:"quantity"`
+	Quantity       string `json:"quantity"`
 	ExpirationDate string `json:"expiration_date"`
 }
 
@@ -42,7 +43,7 @@ func (p *GetProductUseCase) Execute() []GetProductOutput {
 				ID:             prd.ID,
 				Name:           prd.Name,
 				CreationDate:   prd.CreationDate.Format("2006-01-02"),
-				Quantity:       prd.Quantity,
+				Quantity:       strconv.Itoa(prd.Quantity),
 				ExpirationDate: prd.ExpirationDate.Format("2006-01-02"),
 			}
 			products = append(products, product)

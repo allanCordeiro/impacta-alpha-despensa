@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
@@ -37,7 +36,29 @@ func TestNewStockDb(t *testing.T) {
 }
 
 func TestGetStock(t *testing.T) {
-	fmt.Println("teste")
+	//db := setupDB()
+	//clientDB := NewStockDb(db)
+	//t.Run("Given a valid product, when calls save method then data should be stored", func(t *testing.T) {
+	//	expectedPrd1Name := "product 1"
+	//	expectedPrd1CreationDate := time.Now()
+	//	expectedPrd1Quantity := 20
+	//	expectedPrd1ExpirationDate := time.Now().Add(time.Hour * 24 * 10)
+	//	product := entity.NewProduct(
+	//		expectedPrd1Name,
+	//		expectedPrd1CreationDate,
+	//		expectedPrd1Quantity,
+	//		expectedPrd1ExpirationDate
+	//		)
+	//	err := clientDB.Save(product)
+	//	assert.Nil(t, err)
+	//	expectedExpiredPrdName := "product 1"
+	//	expectedExpiredPrdCreationDate := time.Now()
+	//	expectedExpiredPrdQuantity := 20
+	//	expectedExpiredPrdExpirationDate := time.Now().Add(-time.Hour * 24 * 10)
+	//	product
+	//}
+
+	//tearDown(db)
 }
 
 func setupDB() *sql.DB {
