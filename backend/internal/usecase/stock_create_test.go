@@ -19,10 +19,6 @@ func (m *StockCreateGatewayMock) Save(stock *entity.Product) error {
 	return args.Error(0)
 }
 
-func (m *StockCreateGatewayMock) GetProducts() []entity.Product {
-	return []entity.Product{}
-}
-
 func (m *StockCreateGatewayMock) GetByID(id string) (*entity.Product, error) {
 	return &entity.Product{}, nil
 }

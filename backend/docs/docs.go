@@ -141,7 +141,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "quantity": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         }

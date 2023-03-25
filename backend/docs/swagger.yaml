@@ -30,7 +30,7 @@ definitions:
       name:
         type: string
       quantity:
-        type: integer
+        type: string
     type: object
 host: localhost:8000
 info:

@@ -72,6 +72,7 @@ func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 			_ = json.NewEncoder(w).Encode(&Response{
 				Status:     "error",
 				StatusCode: http.StatusInternalServerError,
+				Data:       "ocorreu um erro interno",
 			})
 			return
 		}
