@@ -3,7 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
 	"github.com/stretchr/testify/assert"
@@ -31,7 +31,7 @@ func (m *StockGetGatewayMock) GetByID(id string) (*entity.Product, error) {
 
 func (m *StockGetGatewayMock) GetAllProducts() ([]entity.Product, error) {
 	args := m.Called()
-	return args.Get(0).([]entity.Product), nil
+	return args.Get(0).([]entity.Product), args.Error(1)
 }
 
 func TestStockHandler_GetProducts(t *testing.T) {
@@ -62,7 +62,7 @@ func TestStockHandler_GetProducts(t *testing.T) {
 	t.Run("Given a list of products when call get method should display non-expired products list", func(t *testing.T) {
 		m := &StockGetGatewayMock{}
 		var received []usecase.GetProductOutput
-		m.On("GetAllProducts").Return(listProducts)
+		m.On("GetAllProducts").Return(listProducts, nil)
 		getHandler := NewStockandler(m)
 
 		request, err := http.NewRequest(http.MethodGet, "/api/stock", nil)
@@ -175,8 +175,8 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 			product: usecase.CreateProductInput{
 				Name:           "Invalid product",
 				CreationDate:   time.Now().Add(time.Hour * 24 * 2).Format("2006-01-02"),
-				Quantity:       2,
-				ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
+				Quantity:       0,
+				ExpirationDate: time.Now().Add(-time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   false,
 			responseCode: 400,
@@ -188,6 +188,14 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 						map[string]interface{}{
 							"entity": "stock",
 							"err":    "a quantidade de itens esta incorreta",
+						},
+						map[string]interface{}{
+							"entity": "stock",
+							"err":    "a data de entrada nao deve estar no futuro",
+						},
+						map[string]interface{}{
+							"entity": "stock",
+							"err":    "data de vencimento anterior ao dia atual",
 						},
 					},
 				},
@@ -218,8 +226,38 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 			assert.Equal(t, tt.responseData.Status, received.Status)
 			assert.Equal(t, tt.responseData.StatusCode, received.StatusCode)
 			assert.Equal(t, tt.responseData.Data, received.Data)
-			fmt.Println(received.Data)
 		})
 	}
+
+	t.Run("Given a valid product, when return any unexpected error should return an http error 500", func(t *testing.T) {
+		m := &StockGetGatewayMock{}
+		m.On("Save", mock.Anything).Return(errors.New("SQL whatever error"))
+		product := usecase.CreateProductInput{
+			Name:           "Valid product",
+			CreationDate:   time.Now().Format("2006-01-02"),
+			Quantity:       2,
+			ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
+		}
+		expectedResponse := "ocorreu um erro interno"
+
+		postHandler := NewStockandler(m)
+		var received Response
+
+		var buf bytes.Buffer
+		json.NewEncoder(&buf).Encode(product)
+		request, err := http.NewRequest(http.MethodPost, "/api/stock", &buf)
+		response := httptest.NewRecorder()
+		assert.Nil(t, err)
+
+		postHandler.CreateProduct(response, request)
+		body, err := io.ReadAll(response.Body)
+		err = json.Unmarshal(body, &received)
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusInternalServerError, response.Code)
+		assert.Equal(t, "error", received.Status)
+		assert.Equal(t, http.StatusInternalServerError, received.StatusCode)
+		assert.Equal(t, expectedResponse, received.Data)
+
+	})
 
 }

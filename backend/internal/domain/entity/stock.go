@@ -23,17 +23,23 @@ func NewProduct(name string, creationDate time.Time, quantity int, expirationDat
 	}
 }
 
-func (p *Product) IsValid() (bool, error) {
+func (p *Product) IsValid() (bool, []error) {
+	var errorList []error
+
 	if p.Quantity < 1 || p.Quantity > 32767 {
-		return false, ErrInvalidQuantity
+		errorList = append(errorList, ErrInvalidQuantity)
 	}
 
 	if p.CreationDate.After(time.Now()) {
-		return false, ErrCreationDateInTheFuture
+		errorList = append(errorList, ErrCreationDateInTheFuture)
 	}
 
 	if p.ExpirationDate.Before(time.Now()) {
-		return false, ErrExpirationDateInThePast
+		errorList = append(errorList, ErrExpirationDateInThePast)
+	}
+
+	if len(errorList) > 0 {
+		return false, errorList
 	}
 
 	return true, nil

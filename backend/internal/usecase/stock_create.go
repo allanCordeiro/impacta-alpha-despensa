@@ -55,8 +55,10 @@ func (p *CreateProductUseCase) Execute(input CreateProductInput) CreateProductOu
 
 	prd := entity.NewProduct(input.Name, creationDate, input.Quantity, expirationDate)
 	if ok, err := prd.IsValid(); !ok {
-		errorMsg := Msg{Entity: "stock", Err: err.Error()}
-		errors.Msgs = append(errors.Msgs, errorMsg)
+		for _, singleErr := range err {
+			errorMsg := Msg{Entity: "stock", Err: singleErr.Error()}
+			errors.Msgs = append(errors.Msgs, errorMsg)
+		}
 	}
 
 	if !errors.shouldProceed() {

@@ -14,7 +14,7 @@ func TestEntity(t *testing.T) {
 		quantity       int
 		expirationDate time.Time
 		isShouldBeOk   bool
-		expectedErr    error
+		expectedErr    []error
 	}{
 		{
 			name:           "given valid data when call NewProduct should be a valid result",
@@ -32,7 +32,7 @@ func TestEntity(t *testing.T) {
 			quantity:       16,
 			expirationDate: time.Now().Add(time.Hour * 24 * 10),
 			isShouldBeOk:   false,
-			expectedErr:    ErrCreationDateInTheFuture,
+			expectedErr:    []error{ErrCreationDateInTheFuture},
 		},
 		{
 			name:           "given expiration date in the past when call NewProduct should send an error",
@@ -41,7 +41,7 @@ func TestEntity(t *testing.T) {
 			quantity:       16,
 			expirationDate: time.Now().Add(-time.Hour * 24 * 10),
 			isShouldBeOk:   false,
-			expectedErr:    ErrExpirationDateInThePast,
+			expectedErr:    []error{ErrExpirationDateInThePast},
 		},
 		{
 			name:           "given negative quantity when call NewProduct should send an error",
@@ -50,7 +50,7 @@ func TestEntity(t *testing.T) {
 			quantity:       -5,
 			expirationDate: time.Now().Add(time.Hour * 24 * 10),
 			isShouldBeOk:   false,
-			expectedErr:    ErrInvalidQuantity,
+			expectedErr:    []error{ErrInvalidQuantity},
 		},
 		{
 			name:           "given greater than 33k quantity when call NewProduct should send an error",
@@ -59,7 +59,7 @@ func TestEntity(t *testing.T) {
 			quantity:       33000,
 			expirationDate: time.Now().Add(time.Hour * 24 * 10),
 			isShouldBeOk:   false,
-			expectedErr:    ErrInvalidQuantity,
+			expectedErr:    []error{ErrInvalidQuantity},
 		},
 	}
 

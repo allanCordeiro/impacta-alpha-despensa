@@ -19,10 +19,9 @@ func TestNewStockDb(t *testing.T) {
 		expectedExpirationDate := time.Now().Add(time.Hour * 24 * 10)
 
 		product := entity.NewProduct(expectedName, expectedCreationDate, expectedQuantity, expectedExpirationDate)
-		prdOk, err := product.IsValid()
-		assert.Nil(t, err)
+		prdOk, _ := product.IsValid()
 		assert.True(t, prdOk)
-		err = clientDB.Save(product)
+		err := clientDB.Save(product)
 		assert.Nil(t, err)
 
 		receivedPrd, err := clientDB.GetByID(product.ID)
