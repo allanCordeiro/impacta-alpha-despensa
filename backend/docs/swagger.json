@@ -134,7 +134,7 @@
                     "type": "string"
                 },
                 "quantity": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         }
