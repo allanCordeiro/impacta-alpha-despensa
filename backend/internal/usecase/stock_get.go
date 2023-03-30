@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
 )
 
 type GetProductInput struct {
@@ -38,7 +39,7 @@ func (p *GetProductUseCase) Execute() []GetProductOutput {
 	var products []GetProductOutput
 	for _, prd := range entities {
 		var product GetProductOutput
-		if isExpirationDateValid(prd.ExpirationDate) {
+		if isExpirationDateValid(prd.ExpirationDate) && hasEnoughQuantity(prd.Quantity) {
 			product = GetProductOutput{
 				ID:             prd.ID,
 				Name:           prd.Name,
@@ -54,4 +55,8 @@ func (p *GetProductUseCase) Execute() []GetProductOutput {
 
 func isExpirationDateValid(date time.Time) bool {
 	return date.After(time.Now())
+}
+
+func hasEnoughQuantity(quantity int) bool {
+	return quantity > 0
 }

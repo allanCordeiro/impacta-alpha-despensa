@@ -1,11 +1,12 @@
 package usecase
 
 import (
+	"testing"
+	"time"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"testing"
-	"time"
 )
 
 type StockGetGatewayMock struct {
@@ -48,6 +49,13 @@ func TestGetProductUseCase_Execute(t *testing.T) {
 			CreationDate:   time.Now(),
 			ExpirationDate: time.Now().Add(-time.Hour * 5),
 			Quantity:       2,
+		},
+		{
+			ID:             "4",
+			Name:           "produto com quantidade igual a zero",
+			CreationDate:   time.Now(),
+			ExpirationDate: time.Now().Add(time.Hour * 24 * 5),
+			Quantity:       0,
 		},
 	}
 
