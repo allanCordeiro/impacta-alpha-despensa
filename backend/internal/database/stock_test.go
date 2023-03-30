@@ -2,11 +2,12 @@ package database
 
 import (
 	"database/sql"
+	"testing"
+	"time"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
-	"testing"
-	"time"
 )
 
 func TestNewStockDb(t *testing.T) {
@@ -31,6 +32,45 @@ func TestNewStockDb(t *testing.T) {
 		assert.Equal(t, expectedQuantity, receivedPrd.Quantity)
 		assert.True(t, expectedExpirationDate.Equal(receivedPrd.ExpirationDate))
 	})
+	tearDown(db)
+}
+
+func TestGetProduct(t *testing.T) {
+	db := setupDB()
+	clientDB := NewStockDb(db)
+	t.Run("Given a valid product list when calls get product by id then should shown one product", func(t *testing.T) {
+		expectedPrd1Name := "product 1"
+		expectedPrd1CreationDate := time.Now()
+		expectedPrd1Quantity := 20
+		expectedPrd1ExpirationDate := time.Now().Add(time.Hour * 24 * 10)
+		product := entity.NewProduct(
+			expectedPrd1Name,
+			expectedPrd1CreationDate,
+			expectedPrd1Quantity,
+			expectedPrd1ExpirationDate)
+		err := clientDB.Save(product)
+		assert.Nil(t, err)
+		expectedID := product.ID
+
+		expectedExpiredPrdName := "product 2"
+		expectedExpiredPrdCreationDate := time.Now()
+		expectedExpiredPrdQuantity := 20
+		expectedExpiredPrdExpirationDate := time.Now().Add(time.Hour * 24 * 10)
+
+		product = entity.NewProduct(
+			expectedExpiredPrdName,
+			expectedExpiredPrdCreationDate,
+			expectedExpiredPrdQuantity,
+			expectedExpiredPrdExpirationDate)
+		err = clientDB.Save(product)
+		assert.Nil(t, err)
+
+		receivedProduct, err := clientDB.GetByID(expectedID)
+		assert.Nil(t, err)
+		assert.Equal(t, expectedID, receivedProduct.ID)
+
+	})
+
 	tearDown(db)
 }
 
