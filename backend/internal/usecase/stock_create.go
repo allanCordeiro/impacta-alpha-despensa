@@ -1,9 +1,10 @@
 package usecase
 
 import (
+	"time"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
-	"time"
 )
 
 type CreateProductInput struct {
@@ -82,10 +83,7 @@ func dateParse(date string) (time.Time, error) {
 }
 
 func (e *CreateProductOutput) shouldProceed() bool {
-	if len(e.Msgs) > 0 {
-		return false
-	}
-	return true
+	return len(e.Msgs) <= 0
 }
 
 func isInputValid(input CreateProductInput) bool {
