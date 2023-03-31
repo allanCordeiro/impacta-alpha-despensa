@@ -1,18 +1,18 @@
 package database
 
 import (
-	"database/sql"
 	"testing"
 	"time"
 
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database/mock_db"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewStockDb(t *testing.T) {
-	db := setupDB()
-	clientDB := NewStockDb(db)
+	db := mock_db.SetupDB()
+	stockDb := NewStockDb(db)
 	t.Run("Given a valid product, when calls save method then data should be stored", func(t *testing.T) {
 		expectedName := "product 1"
 		expectedCreationDate := time.Now()
@@ -22,22 +22,22 @@ func TestNewStockDb(t *testing.T) {
 		product := entity.NewProduct(expectedName, expectedCreationDate, expectedQuantity, expectedExpirationDate)
 		prdOk, _ := product.IsValid()
 		assert.True(t, prdOk)
-		err := clientDB.Save(product)
+		err := stockDb.Save(product)
 		assert.Nil(t, err)
 
-		receivedPrd, err := clientDB.GetByID(product.ID)
+		receivedPrd, err := stockDb.GetByID(product.ID)
 		assert.Nil(t, err)
 		assert.Equal(t, expectedName, receivedPrd.Name)
 		assert.True(t, expectedCreationDate.Equal(receivedPrd.CreationDate))
 		assert.Equal(t, expectedQuantity, receivedPrd.Quantity)
 		assert.True(t, expectedExpirationDate.Equal(receivedPrd.ExpirationDate))
 	})
-	tearDown(db)
+	mock_db.TearDown(db)
 }
 
 func TestGetProduct(t *testing.T) {
-	db := setupDB()
-	clientDB := NewStockDb(db)
+	db := mock_db.SetupDB()
+	stockDb := NewStockDb(db)
 	t.Run("Given a valid product list when calls get product by id then should shown one product", func(t *testing.T) {
 		expectedPrd1Name := "product 1"
 		expectedPrd1CreationDate := time.Now()
@@ -48,7 +48,7 @@ func TestGetProduct(t *testing.T) {
 			expectedPrd1CreationDate,
 			expectedPrd1Quantity,
 			expectedPrd1ExpirationDate)
-		err := clientDB.Save(product)
+		err := stockDb.Save(product)
 		assert.Nil(t, err)
 		expectedID := product.ID
 
@@ -62,21 +62,21 @@ func TestGetProduct(t *testing.T) {
 			expectedExpiredPrdCreationDate,
 			expectedExpiredPrdQuantity,
 			expectedExpiredPrdExpirationDate)
-		err = clientDB.Save(product)
+		err = stockDb.Save(product)
 		assert.Nil(t, err)
 
-		receivedProduct, err := clientDB.GetByID(expectedID)
+		receivedProduct, err := stockDb.GetByID(expectedID)
 		assert.Nil(t, err)
 		assert.Equal(t, expectedID, receivedProduct.ID)
 
 	})
 
-	tearDown(db)
+	mock_db.TearDown(db)
 }
 
 func TestGetStock(t *testing.T) {
-	db := setupDB()
-	clientDB := NewStockDb(db)
+	db := mock_db.SetupDB()
+	stockDb := NewStockDb(db)
 	t.Run("Given a valid product, when calls save method then data should be stored", func(t *testing.T) {
 		expectedPrd1Name := "product 1"
 		expectedPrd1CreationDate := time.Now()
@@ -87,7 +87,7 @@ func TestGetStock(t *testing.T) {
 			expectedPrd1CreationDate,
 			expectedPrd1Quantity,
 			expectedPrd1ExpirationDate)
-		err := clientDB.Save(product)
+		err := stockDb.Save(product)
 		assert.Nil(t, err)
 		expectedExpiredPrdName := "product 2"
 		expectedExpiredPrdCreationDate := time.Now()
@@ -99,31 +99,13 @@ func TestGetStock(t *testing.T) {
 			expectedExpiredPrdCreationDate,
 			expectedExpiredPrdQuantity,
 			expectedExpiredPrdExpirationDate)
-		err = clientDB.Save(product)
+		err = stockDb.Save(product)
 		assert.Nil(t, err)
 
-		productList, err := clientDB.GetAllProducts()
+		productList, err := stockDb.GetAllProducts()
 		assert.Nil(t, err)
 		assert.Equal(t, 2, len(productList))
 	})
 
-	tearDown(db)
-}
-
-func setupDB() *sql.DB {
-	db, err := sql.Open("sqlite3", ":memory:")
-	if err != nil {
-		panic(err)
-	}
-	_, err = db.Exec("CREATE TABLE stock_products (id varchar(255), name varchar(255), creation_date date, quantity int, expiration_date date)")
-	if err != nil {
-		panic(err)
-	}
-	return db
-}
-
-func tearDown(db *sql.DB) {
-	defer db.Close()
-
-	db.Exec("DROP TABLE stock_products")
+	mock_db.TearDown(db)
 }
