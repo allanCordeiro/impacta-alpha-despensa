@@ -1,9 +1,10 @@
 package entity
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEntity(t *testing.T) {
@@ -70,6 +71,46 @@ func TestEntity(t *testing.T) {
 			assert.NotNil(t, prd.ID)
 			assert.Equal(t, tt.expectedErr, err)
 			assert.Equal(t, tt.isShouldBeOk, ok)
+		})
+	}
+}
+
+func TestUpdateQuantity(t *testing.T) {
+	scenarios := []struct {
+		name          string
+		quantity      int
+		expectedStock int
+		expectedErr   error
+	}{
+		{
+			name:          "given valid quantity when update product should be ok",
+			quantity:      2,
+			expectedStock: 3,
+			expectedErr:   nil,
+		},
+		{
+			name:          "given quantity to sold out stock when update product should be ok",
+			quantity:      5,
+			expectedStock: 0,
+			expectedErr:   nil,
+		},
+		{
+			name:          "given quantity to sold more than available sotck when update product should send an error",
+			quantity:      6,
+			expectedStock: 5,
+			expectedErr:   ErrInsufficientStock,
+		},
+	}
+
+	for _, tt := range scenarios {
+		t.Run(tt.name, func(t *testing.T) {
+			prod := NewProduct("product", time.Now(), 5, time.Now().Add(time.Hour*24*2))
+			ok, _ := prod.IsValid()
+			assert.True(t, ok)
+
+			err := prod.UpdateQuantity(tt.quantity)
+			assert.Equal(t, tt.expectedErr, err)
+			assert.Equal(t, tt.expectedStock, prod.Quantity)
 		})
 	}
 }
