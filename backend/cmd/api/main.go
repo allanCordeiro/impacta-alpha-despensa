@@ -2,10 +2,13 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
-	_ "github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/stock_handlers"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-migrate/migrate/v4"
@@ -13,9 +16,6 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/subosito/gotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"log"
-	"net/http"
-	"os"
 )
 
 // @title 						Despensa Faculdade Impacta's Project
@@ -51,7 +51,7 @@ func main() {
 	m.Up()
 
 	stockDB := database.NewStockDb(db)
-	stockHandler := handlers.NewStockandler(stockDB)
+	stockHandler := stock_handlers.NewStockandler(stockDB)
 
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()

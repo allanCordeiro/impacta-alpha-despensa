@@ -1,25 +1,17 @@
-package handlers
+package stock_handlers
 
 import (
 	"encoding/json"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
 	"log"
 	"net/http"
+
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
 )
 
 type Response struct {
 	Status     string      `json:"status"`
 	StatusCode int         `json:"statusCode"`
 	Data       interface{} `json:"data"`
-}
-
-type StockHandler struct {
-	StockGateway gateway.StockGateway
-}
-
-func NewStockandler(db gateway.StockGateway) *StockHandler {
-	return &StockHandler{StockGateway: db}
 }
 
 // CreateProduct godoc
@@ -83,22 +75,4 @@ func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		StatusCode: http.StatusBadRequest,
 		Data:       &output,
 	})
-	return
-}
-
-// GetProducts godoc
-// @Summary 			Get Products list
-// @Description 		Get the list of all available products
-// @Tags 				stock
-// @Produce 			json
-// @Success 			200	{object}	[]usecase.GetProductOutput
-// @Failure 			500	{object}	Response
-// @Router 				/api/stock [get]
-func (h *StockHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
-	var output []usecase.GetProductOutput
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	uc := usecase.NewGetProductUseCase(h.StockGateway)
-	output = uc.Execute()
-	_ = json.NewEncoder(w).Encode(output)
 }
