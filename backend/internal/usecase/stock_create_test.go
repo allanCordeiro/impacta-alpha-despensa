@@ -7,34 +7,13 @@ import (
 	"time"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-type StockCreateGatewayMock struct {
-	mock.Mock
-}
-
-func (m *StockCreateGatewayMock) Save(stock *entity.Product) error {
-	args := m.Called(stock)
-	return args.Error(0)
-}
-
-func (m *StockCreateGatewayMock) GetByID(id string) (*entity.Product, error) {
-	return &entity.Product{}, nil
-}
-
-func (m *StockCreateGatewayMock) GetAllProducts() ([]entity.Product, error) {
-	return []entity.Product{}, nil
-}
-
-func (m *StockCreateGatewayMock) UpdateQuantity(stock *entity.Product) error {
-	args := m.Called(stock)
-	return args.Error(0)
-}
-
 func TestCreateProductUseCase_Execute(t *testing.T) {
-	m := &StockCreateGatewayMock{}
+	m := &mocks.StockGatewayMock{}
 	brScenarios := []struct {
 		name              string
 		product           string
@@ -118,7 +97,7 @@ func TestCreateProductUseCase_Execute(t *testing.T) {
 	}
 
 	t.Run("given a valid data when execute CreateProductUseCase but an gateway error comes in should return an internal error", func(t *testing.T) {
-		m := &StockCreateGatewayMock{}
+		m := &mocks.StockGatewayMock{}
 		m.On("Save", mock.Anything).Return(errors.New("sql: database is closed"))
 		uc := NewCreateProductUseCase(m)
 		input := CreateProductInput{
