@@ -26,6 +26,11 @@ func (m *StockGetGatewayMock) GetAllProducts() ([]entity.Product, error) {
 	return args.Get(0).([]entity.Product), args.Error(1)
 }
 
+func (m *StockGetGatewayMock) UpdateQuantity(stock *entity.Product) error {
+	args := m.Called(stock)
+	return args.Error(0)
+}
+
 func TestGetProductUseCase_Execute(t *testing.T) {
 	m := &StockGetGatewayMock{}
 	productList := []entity.Product{

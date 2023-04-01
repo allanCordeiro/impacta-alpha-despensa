@@ -3,11 +3,12 @@ package usecase
 import (
 	"errors"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"testing"
-	"time"
 )
 
 type StockCreateGatewayMock struct {
@@ -25,6 +26,11 @@ func (m *StockCreateGatewayMock) GetByID(id string) (*entity.Product, error) {
 
 func (m *StockCreateGatewayMock) GetAllProducts() ([]entity.Product, error) {
 	return []entity.Product{}, nil
+}
+
+func (m *StockCreateGatewayMock) UpdateQuantity(stock *entity.Product) error {
+	args := m.Called(stock)
+	return args.Error(0)
 }
 
 func TestCreateProductUseCase_Execute(t *testing.T) {

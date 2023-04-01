@@ -6,4 +6,5 @@ type StockGateway interface {
 	Save(stock *entity.Product) error
 	GetByID(id string) (*entity.Product, error)
 	GetAllProducts() ([]entity.Product, error)
+	UpdateQuantity(stock *entity.Product) error
 }

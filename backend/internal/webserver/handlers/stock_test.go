@@ -4,15 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 // Mocks
@@ -32,6 +33,11 @@ func (m *StockGetGatewayMock) GetByID(id string) (*entity.Product, error) {
 func (m *StockGetGatewayMock) GetAllProducts() ([]entity.Product, error) {
 	args := m.Called()
 	return args.Get(0).([]entity.Product), args.Error(1)
+}
+
+func (m *StockGetGatewayMock) UpdateQuantity(stock *entity.Product) error {
+	args := m.Called(stock)
+	return args.Error(0)
 }
 
 func TestStockHandler_GetProducts(t *testing.T) {

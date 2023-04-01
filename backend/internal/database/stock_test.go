@@ -74,7 +74,7 @@ func TestGetProduct(t *testing.T) {
 	mock_db.TearDown(db)
 }
 
-func TestGetStock(t *testing.T) {
+func TestGetFullStock(t *testing.T) {
 	db := mock_db.SetupDB()
 	stockDb := NewStockDb(db)
 	t.Run("Given a valid product, when calls save method then data should be stored", func(t *testing.T) {
@@ -108,4 +108,57 @@ func TestGetStock(t *testing.T) {
 	})
 
 	mock_db.TearDown(db)
+}
+
+func TestUpdateStock(t *testing.T) {
+	db := mock_db.SetupDB()
+	stockDb := NewStockDb(db)
+	tests := []struct {
+		name                      string
+		quantityToDrop            int
+		expectedRemainingQuantity int
+		expectedError             error
+	}{
+		{
+			name:                      "Given valid data to reduce stock when call update then should be ok",
+			quantityToDrop:            2,
+			expectedRemainingQuantity: 3,
+			expectedError:             nil,
+		},
+		{
+			name:                      "Given valid data to reduce stock to zero when call update then should be ok",
+			quantityToDrop:            5,
+			expectedRemainingQuantity: 0,
+			expectedError:             nil,
+		},
+		{
+			name:                      "Given quantity to reduce stock less than zero when call update then should return error",
+			quantityToDrop:            6,
+			expectedRemainingQuantity: 5,
+			expectedError:             entity.ErrInsufficientStock,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			expectedPrd := entity.NewProduct("product 2", time.Now(), 5, time.Now().Add(time.Hour*24*3))
+			err := stockDb.Save(expectedPrd)
+			assert.Nil(t, err)
+
+			err = expectedPrd.UpdateQuantity(tt.quantityToDrop)
+			assert.Equal(t, tt.expectedError, err)
+
+			err = stockDb.UpdateQuantity(expectedPrd)
+			assert.Nil(t, err)
+
+			receivedPrd, err := stockDb.GetByID(expectedPrd.ID)
+			assert.Nil(t, err)
+
+			assert.Equal(t, tt.expectedRemainingQuantity, receivedPrd.Quantity)
+
+		})
+	}
+
+	mock_db.TearDown(db)
+
 }

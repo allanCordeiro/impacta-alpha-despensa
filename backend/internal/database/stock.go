@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 )
 
@@ -33,7 +34,7 @@ func (s *StockDb) Save(product *entity.Product) error {
 
 func (s *StockDb) GetByID(id string) (*entity.Product, error) {
 	product := &entity.Product{}
-	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE id = ?")
+	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE id = $1")
 	if err != nil {
 		return nil, err
 	}
@@ -69,4 +70,16 @@ func (s *StockDb) GetAllProducts() ([]entity.Product, error) {
 		products = append(products, prod)
 	}
 	return products, nil
+}
+
+func (s *StockDb) UpdateQuantity(stock *entity.Product) error {
+	stmt, err := s.DB.Prepare("UPDATE stock_products SET quantity = $2 WHERE id = $1")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(stock.Quantity, stock.ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
