@@ -1,9 +1,13 @@
 package mock_db
 
-import "database/sql"
+import (
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
+)
 
 func SetupDB() *sql.DB {
-	db, err := sql.Open("sqlite3", ":memory:")
+	db, err := sql.Open("sqlite3", "file:foobar?mode=memory&cache=shared")
 	if err != nil {
 		panic(err)
 	}

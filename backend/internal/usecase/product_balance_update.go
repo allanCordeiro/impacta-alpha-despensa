@@ -66,13 +66,25 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 	})
 
 	if err != nil {
-		return nil, err
+		ctx := context.Background()
+		stockGateway, errGetQty := p.getStockRepository(ctx)
+		if errGetQty != nil {
+			return nil, errGetQty
+		}
+
+		product, errGetQty := stockGateway.GetByID(input.ProductID)
+		if errGetQty != nil {
+			return nil, errGetQty
+		}
+
+		output.RemainingQuantity = product.Quantity
+		return output, err
 	}
 	return output, nil
 }
 
 func (p *ProductBalanceUpdateUseCase) getStockRepository(ctx context.Context) (gateway.StockGateway, error) {
-	repo, err := p.Uow.GetRepository(ctx, "StockGateway")
+	repo, err := p.Uow.GetRepository(ctx, "StockDb")
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +92,7 @@ func (p *ProductBalanceUpdateUseCase) getStockRepository(ctx context.Context) (g
 }
 
 func (p *ProductBalanceUpdateUseCase) getProductBalanceRepository(ctx context.Context) (gateway.ProductBalanceGateway, error) {
-	repo, err := p.Uow.GetRepository(ctx, "ProductBalanceGateway")
+	repo, err := p.Uow.GetRepository(ctx, "ProductBalanceDB")
 	if err != nil {
 		return nil, err
 	}

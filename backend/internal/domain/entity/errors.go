@@ -9,5 +9,5 @@ var (
 	ErrExpirationDateInThePast = errors.New("data de vencimento anterior ao dia atual")
 	ErrInvalidExpirationDate   = errors.New("a data de vencimento esta invalida")
 	ErrInvalidQuantity         = errors.New("a quantidade de itens esta incorreta")
-	ErrInsufficientStock       = errors.New("a quantidade de estoque insuficiente")
+	ErrInsufficientStock       = errors.New("quantidade de estoque insuficiente")
 )
