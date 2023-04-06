@@ -21,7 +21,7 @@ type Response struct {
 // CreateProductBalance godoc
 // @Summary 			Create Product Balance
 // @Description 		Create product stock transactions
-// @Tags 				stock-decrease
+// @Tags 				products
 // @Accept 				json
 // @Produce 			json
 // @Param 				request body	Input	true	"product decrease amount"
