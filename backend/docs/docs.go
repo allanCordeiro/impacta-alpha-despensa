@@ -22,7 +22,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/products/{productID}/decrease": {
-            "post": {
+            "put": {
                 "description": "Create product stock transactions",
                 "consumes": [
                     "application/json"

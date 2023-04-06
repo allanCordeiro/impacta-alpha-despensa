@@ -15,7 +15,7 @@
     "basePath": "/",
     "paths": {
         "/api/products/{productID}/decrease": {
-            "post": {
+            "put": {
                 "description": "Create product stock transactions",
                 "consumes": [
                     "application/json"
