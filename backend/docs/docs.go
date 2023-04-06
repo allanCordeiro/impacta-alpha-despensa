@@ -43,6 +43,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/balance_handlers.Input"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "product identifier",
+                        "name": "productID",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

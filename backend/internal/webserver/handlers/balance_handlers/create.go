@@ -25,6 +25,7 @@ type Response struct {
 // @Accept 				json
 // @Produce 			json
 // @Param 				request body	Input	true	"product decrease amount"
+// @Param 				productID path string true "product identifier"
 // @Success 			200	{object}	Response
 // @Failure 			400	{object}	Response
 // @Failure 			500	{object}	Response
