@@ -14,6 +14,52 @@
     "host": "localhost:8000",
     "basePath": "/",
     "paths": {
+        "/api/products/{productID}/decrease": {
+            "post": {
+                "description": "Create product stock transactions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stock-decrease"
+                ],
+                "summary": "Create Product Balance",
+                "parameters": [
+                    {
+                        "description": "product decrease amount",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Input"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/stock": {
             "get": {
                 "description": "Get the list of all available products",
@@ -82,52 +128,6 @@
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/stock_handlers.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/stock-decrease/{productID}": {
-            "post": {
-                "description": "Create product stock transactions",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "stock-decrease"
-                ],
-                "summary": "Create Product Balance",
-                "parameters": [
-                    {
-                        "description": "product decrease amount",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/balance_handlers.Input"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/balance_handlers.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/balance_handlers.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/balance_handlers.Response"
                         }
                     }
                 }
