@@ -68,6 +68,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/balance_handlers.Input'
+      - description: product identifier
+        in: path
+        name: productID
+        required: true
+        type: string
       produces:
       - application/json
       responses:
