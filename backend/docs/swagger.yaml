@@ -1,6 +1,19 @@
 basePath: /
 definitions:
-  handlers.Response:
+  balance_handlers.Input:
+    properties:
+      quantity:
+        type: integer
+    type: object
+  balance_handlers.Response:
+    properties:
+      data: {}
+      status:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  stock_handlers.Response:
     properties:
       data: {}
       status:
@@ -58,7 +71,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Response'
+            $ref: '#/definitions/stock_handlers.Response'
       summary: Get Products list
       tags:
       - stock
@@ -79,16 +92,46 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.Response'
+            $ref: '#/definitions/stock_handlers.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.Response'
+            $ref: '#/definitions/stock_handlers.Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Response'
+            $ref: '#/definitions/stock_handlers.Response'
       summary: Create Product
       tags:
       - stock
+  /api/stock-decrease/{productID}:
+    post:
+      consumes:
+      - application/json
+      description: Create product stock transactions
+      parameters:
+      - description: product decrease amount
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/balance_handlers.Input'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+      summary: Create Product Balance
+      tags:
+      - stock-decrease
 swagger: "2.0"

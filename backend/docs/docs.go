@@ -44,7 +44,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Response"
+                            "$ref": "#/definitions/stock_handlers.Response"
                         }
                     }
                 }
@@ -76,19 +76,65 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Response"
+                            "$ref": "#/definitions/stock_handlers.Response"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Response"
+                            "$ref": "#/definitions/stock_handlers.Response"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Response"
+                            "$ref": "#/definitions/stock_handlers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stock-decrease/{productID}": {
+            "post": {
+                "description": "Create product stock transactions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stock-decrease"
+                ],
+                "summary": "Create Product Balance",
+                "parameters": [
+                    {
+                        "description": "product decrease amount",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Input"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
                         }
                     }
                 }
@@ -96,7 +142,27 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.Response": {
+        "balance_handlers.Input": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "balance_handlers.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "status": {
+                    "type": "string"
+                },
+                "statusCode": {
+                    "type": "integer"
+                }
+            }
+        },
+        "stock_handlers.Response": {
             "type": "object",
             "properties": {
                 "data": {},

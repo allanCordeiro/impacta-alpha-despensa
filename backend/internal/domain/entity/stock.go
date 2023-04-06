@@ -1,8 +1,9 @@
 package entity
 
 import (
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Product struct {
@@ -21,6 +22,14 @@ func NewProduct(name string, creationDate time.Time, quantity int, expirationDat
 		Quantity:       quantity,
 		ExpirationDate: expirationDate,
 	}
+}
+
+func (p *Product) UpdateQuantity(quantity int) error {
+	if p.Quantity-quantity < 0 {
+		return ErrInsufficientStock
+	}
+	p.Quantity -= quantity
+	return nil
 }
 
 func (p *Product) IsValid() (bool, []error) {

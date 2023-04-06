@@ -1,11 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
-	_ "github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers"
+	balancehandlers "github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/balance_handlers"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/stock_handlers"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/pkg/uow"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-migrate/migrate/v4"
@@ -13,9 +19,6 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/subosito/gotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"log"
-	"net/http"
-	"os"
 )
 
 // @title 						Despensa Faculdade Impacta's Project
@@ -51,7 +54,17 @@ func main() {
 	m.Up()
 
 	stockDB := database.NewStockDb(db)
-	stockHandler := handlers.NewStockandler(stockDB)
+	stockHandler := stock_handlers.NewStockandler(stockDB)
+
+	uow := uow.NewUow(context.Background(), db)
+	uow.Register("StockDb", func(tx *sql.Tx) interface{} {
+		return database.NewStockDb(db)
+	})
+	uow.Register("ProductBalanceDB", func(tx *sql.Tx) interface{} {
+		return database.NewProductBalanceDB(db)
+	})
+
+	productBalancerHandler := balancehandlers.NewProductBalance(uow)
 
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
@@ -60,6 +73,9 @@ func main() {
 	r.Route("/api/stock", func(r chi.Router) {
 		r.Post("/", stockHandler.CreateProduct)
 		r.Get("/", stockHandler.GetProducts)
+	})
+	r.Route("/api/products/{productID}", func(r chi.Router) {
+		r.Put("/decrease", productBalancerHandler.CreateProductBalance)
 	})
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
