@@ -28,7 +28,7 @@ type Response struct {
 // @Success 			200	{object}	Response
 // @Failure 			400	{object}	Response
 // @Failure 			500	{object}	Response
-// @Router 				/api/stock-decrease/{productID} [post]
+// @Router 				/api/products/{productID}/decrease [post]
 func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Request) {
 	var input usecase.UpdateProductInput
 	var req Input
