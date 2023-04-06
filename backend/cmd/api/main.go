@@ -74,8 +74,8 @@ func main() {
 		r.Post("/", stockHandler.CreateProduct)
 		r.Get("/", stockHandler.GetProducts)
 	})
-	r.Route("/api/stock-decrease/{productID}", func(r chi.Router) {
-		r.Post("/", productBalancerHandler.CreateProductBalance)
+	r.Route("/api/products/{productID}", func(r chi.Router) {
+		r.Put("/decrease", productBalancerHandler.CreateProductBalance)
 	})
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
