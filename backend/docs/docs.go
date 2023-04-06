@@ -31,7 +31,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "stock-decrease"
+                    "products"
                 ],
                 "summary": "Create Product Balance",
                 "parameters": [
