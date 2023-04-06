@@ -73,11 +73,11 @@ func (s *StockDb) GetAllProducts() ([]entity.Product, error) {
 }
 
 func (s *StockDb) UpdateQuantity(stock *entity.Product) error {
-	stmt, err := s.DB.Prepare("UPDATE stock_products SET quantity = $2 WHERE id = $1")
+	stmt, err := s.DB.Prepare("UPDATE stock_products SET quantity = $1 WHERE id = $2")
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(stock.ID, stock.Quantity)
+	_, err = stmt.Exec(stock.Quantity, stock.ID)
 	if err != nil {
 		return err
 	}

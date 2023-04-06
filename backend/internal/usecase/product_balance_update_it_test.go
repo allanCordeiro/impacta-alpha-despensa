@@ -82,8 +82,8 @@ func TestProductBalanceUpdateIntegrationTest(t *testing.T) {
 				assert.Equal(t, tt.expectedError, err)
 			} else {
 				output, err := uc.Execute(tt.secondReduce)
-				assert.Equal(t, tt.expectedSecResult, output)
 				assert.Equal(t, tt.expectedError, err)
+				assert.Equal(t, tt.expectedSecResult, output)
 			}
 
 		})
