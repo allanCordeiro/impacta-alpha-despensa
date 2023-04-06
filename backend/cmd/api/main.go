@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net/http"
@@ -8,7 +9,9 @@ import (
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
+	balancehandlers "github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/balance_handlers"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/stock_handlers"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/pkg/uow"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-migrate/migrate/v4"
@@ -53,6 +56,16 @@ func main() {
 	stockDB := database.NewStockDb(db)
 	stockHandler := stock_handlers.NewStockandler(stockDB)
 
+	uow := uow.NewUow(context.Background(), db)
+	uow.Register("StockDb", func(tx *sql.Tx) interface{} {
+		return database.NewStockDb(db)
+	})
+	uow.Register("ProductBalanceDB", func(tx *sql.Tx) interface{} {
+		return database.NewProductBalanceDB(db)
+	})
+
+	productBalancerHandler := balancehandlers.NewProductBalance(uow)
+
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -60,6 +73,9 @@ func main() {
 	r.Route("/api/stock", func(r chi.Router) {
 		r.Post("/", stockHandler.CreateProduct)
 		r.Get("/", stockHandler.GetProducts)
+	})
+	r.Route("/api/stock-decrease/{productID}", func(r chi.Router) {
+		r.Post("/", productBalancerHandler.CreateProductBalance)
 	})
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)

@@ -77,7 +77,7 @@ func (s *StockDb) UpdateQuantity(stock *entity.Product) error {
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(stock.Quantity, stock.ID)
+	_, err = stmt.Exec(stock.ID, stock.Quantity)
 	if err != nil {
 		return err
 	}
