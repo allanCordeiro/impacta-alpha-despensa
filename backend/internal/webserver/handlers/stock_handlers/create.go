@@ -4,9 +4,17 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
 )
+
+type RequestInput struct {
+	Name           string `json:"name"`
+	CreationDate   string `json:"creation_date"`
+	Quantity       string `json:"quantity"`
+	ExpirationDate string `json:"expiration_date"`
+}
 
 type Response struct {
 	Status     string      `json:"status"`
@@ -20,13 +28,14 @@ type Response struct {
 // @Tags 				stock
 // @Accept 				json
 // @Produce 			json
-// @Param 				request body	usecase.CreateProductInput	true	"product information"
+// @Param 				request body	RequestInput	true	"product information"
 // @Success 			200	{object}	Response
 // @Failure 			400	{object}	Response
 // @Failure 			500	{object}	Response
 // @Router 				/api/stock [post]
 func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	var input usecase.CreateProductInput
+	var input RequestInput
+
 	var output usecase.CreateProductOutput
 
 	w.Header().Set("Content-Type", "application/json")
@@ -47,7 +56,14 @@ func (h *StockHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uc := usecase.NewCreateProductUseCase(h.StockGateway)
-	output = uc.Execute(input)
+	qtyToInt, _ := strconv.Atoi(input.Quantity)
+	quantityParsed := usecase.CreateProductInput{
+		Name:           input.Name,
+		CreationDate:   input.CreationDate,
+		ExpirationDate: input.ExpirationDate,
+		Quantity:       qtyToInt,
+	}
+	output = uc.Execute(quantityParsed)
 	if len(output.Msgs) == 0 {
 		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(&Response{

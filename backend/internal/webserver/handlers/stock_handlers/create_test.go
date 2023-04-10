@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -18,17 +17,17 @@ import (
 func TestStockHandler_CreateProduct(t *testing.T) {
 	tests := []struct {
 		testName     string
-		product      usecase.CreateProductInput
+		product      RequestInput
 		shouldBeOk   bool
 		responseCode int
 		responseData Response
 	}{
 		{
 			testName: "Given a valid data when send to post handler should return ok",
-			product: usecase.CreateProductInput{
+			product: RequestInput{
 				Name:           "Valid product",
 				CreationDate:   time.Now().Format("2006-01-02"),
-				Quantity:       2,
+				Quantity:       "2",
 				ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   true,
@@ -41,10 +40,10 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 		},
 		{
 			testName: "Given a future creation date product when send to post handler should return error",
-			product: usecase.CreateProductInput{
+			product: RequestInput{
 				Name:           "Invalid product",
 				CreationDate:   time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
-				Quantity:       2,
+				Quantity:       "2",
 				ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   false,
@@ -64,10 +63,10 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 		},
 		{
 			testName: "Given a expired product when send to post handler should return error",
-			product: usecase.CreateProductInput{
+			product: RequestInput{
 				Name:           "Invalid product",
 				CreationDate:   time.Now().Format("2006-01-02"),
-				Quantity:       2,
+				Quantity:       "2",
 				ExpirationDate: time.Now().Add(-time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   false,
@@ -87,10 +86,10 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 		},
 		{
 			testName: "Given a wrong product quantity when send to post handler should return error",
-			product: usecase.CreateProductInput{
+			product: RequestInput{
 				Name:           "Invalid product",
 				CreationDate:   time.Now().Format("2006-01-02"),
-				Quantity:       0,
+				Quantity:       "0",
 				ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   false,
@@ -110,10 +109,10 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 		},
 		{
 			testName: "Given a product with several errors when send to post handler should return error's list",
-			product: usecase.CreateProductInput{
+			product: RequestInput{
 				Name:           "Invalid product",
 				CreationDate:   time.Now().Add(time.Hour * 24 * 2).Format("2006-01-02"),
-				Quantity:       0,
+				Quantity:       "0",
 				ExpirationDate: time.Now().Add(-time.Hour * 24 * 5).Format("2006-01-02"),
 			},
 			shouldBeOk:   false,
@@ -170,10 +169,10 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 	t.Run("Given a valid product, when return any unexpected error should return an http error 500", func(t *testing.T) {
 		m := &StockGetGatewayMock{}
 		m.On("Save", mock.Anything).Return(errors.New("SQL whatever error"))
-		product := usecase.CreateProductInput{
+		product := RequestInput{
 			Name:           "Valid product",
 			CreationDate:   time.Now().Format("2006-01-02"),
-			Quantity:       2,
+			Quantity:       "2",
 			ExpirationDate: time.Now().Add(time.Hour * 24 * 5).Format("2006-01-02"),
 		}
 		expectedResponse := "ocorreu um erro interno"
