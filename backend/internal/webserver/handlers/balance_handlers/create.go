@@ -2,6 +2,7 @@ package balance_handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
@@ -38,6 +39,7 @@ func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Req
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		if err.Error() != "EOF" {
+			log.Println(err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -52,6 +54,7 @@ func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Req
 	uc := usecase.NewProductBalanceUpdateUseCase(h.ProductBalanceUow)
 	ouput, err := uc.Execute(input)
 	if err != nil {
+		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
