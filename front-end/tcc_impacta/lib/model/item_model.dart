@@ -2,7 +2,7 @@ class ItemModel {
   String? id;
   String? name;
   String? creationDate;
-  int? quantity;
+  String? quantity;
   String? expirationDate;
 
   ItemModel({
@@ -30,6 +30,4 @@ class ItemModel {
     data['expiration_date'] = expirationDate;
     return data;
   }
-
-  toJSON() {}
 }

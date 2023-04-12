@@ -1,51 +1,38 @@
 import 'package:flutter/material.dart';
-class ItemRegister extends StatefulWidget {
-  final int? id;
-  final String? name;
-  final DateTime? entryDate;
-  final int? quantity;
-  final DateTime? expirationDate;
+import 'package:provider/provider.dart';
+import 'package:tcc_impacta/model/item_model.dart';
 
-  const ItemRegister({
-    Key? key,
-    required this.id,
-    this.name,
-    required this.entryDate,
-    required this.quantity,
-    required this.expirationDate,
-  }) : super(key: key);
+import '../provider/item.dart';
+import '../repository/implementations/http_api_repository.dart';
+import '../routes/app_routes.dart';
+
+class ItemRegister extends StatefulWidget {
+  const ItemRegister({super.key});
 
   @override
   _ItemRegisterState createState() => _ItemRegisterState();
 }
 
 class _ItemRegisterState extends State<ItemRegister> {
+  final List<ItemModel> _items = [];
+
   final _formKey = GlobalKey<FormState>();
-
-  String? _name;
-  DateTime? _entryDate;
-  int? _quantity;
-  DateTime? _expirationDate;
-
-  @override
-  void initState() {
-    super.initState();
-    _name = widget.name;
-    _entryDate = widget.entryDate;
-    _quantity = widget.quantity;
-    _expirationDate = widget.expirationDate;
-  }
-
+  final Map<String, dynamic> _formData = {};
   @override
   Widget build(BuildContext context) {
+    final HttpApiRepository httpPost = HttpApiRepository();
+    final ItemProvider itemProvider = Provider.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cadastro'),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Card(
-              color: Colors.grey[500],
+              color: Colors.teal[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
@@ -54,79 +41,46 @@ class _ItemRegisterState extends State<ItemRegister> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
-                        initialValue: _name,
+                        onSaved: (value) => _formData['name'] = value!,
                         decoration: const InputDecoration(
                           labelText: 'Nome',
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _name = value;
-                        },
                       ),
                       TextFormField(
-                        initialValue: _entryDate.toString(),
+                        onSaved: (value) =>
+                            _formData['creationDate'] = value!,
                         decoration: const InputDecoration(
-                          labelText: 'Entry Date',
+                          labelText: 'Data da compra',
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an entry date';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _entryDate = DateTime.parse(value!);
-                        },
                       ),
                       TextFormField(
-                        initialValue: _quantity.toString(),
+                        onSaved: (value) => _formData['quantity'] = value!,
                         decoration: const InputDecoration(
-                          labelText: 'Quantity',
+                          labelText: 'Quantidade',
                         ),
                         keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a quantity';
-                          }
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _quantity = int.parse(value!);
-                        },
                       ),
                       TextFormField(
-                        initialValue: _expirationDate.toString(),
+                        onSaved: (value) => _formData['expirationDate'] = value!,
+                        // initialValue: _expirationDate.toString(),
                         decoration: const InputDecoration(
-                          labelText: 'Expiration Date',
+                          labelText: 'Data de validade',
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an expiration date';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          _expirationDate = DateTime.parse(value!);
-                        },
                       ),
                       const SizedBox(height: 16),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                            }
-                            setState(() {});
+                          onPressed: () async{
+                            _formKey.currentState?.save();
+                            await httpPost.addItem(ItemModel(
+                              name: _formData['name'] ?? '',
+                              quantity: _formData['quantity'] ?? '',
+                              creationDate: _formData['creationDate'] ?? '',
+                              expirationDate: _formData['expirationDate'] ?? '',
+                            ));
+                            Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
                           },
-                          child: const Text('Save'),
+                          child: const Text('Cadastrar'),
                         ),
                       ),
                     ],
