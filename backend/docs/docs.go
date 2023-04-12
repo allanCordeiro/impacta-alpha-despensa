@@ -121,7 +121,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/usecase.CreateProductInput"
+                            "$ref": "#/definitions/stock_handlers.RequestInput"
                         }
                     }
                 ],
@@ -169,19 +169,7 @@ const docTemplate = `{
                 }
             }
         },
-        "stock_handlers.Response": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "status": {
-                    "type": "string"
-                },
-                "statusCode": {
-                    "type": "integer"
-                }
-            }
-        },
-        "usecase.CreateProductInput": {
+        "stock_handlers.RequestInput": {
             "type": "object",
             "properties": {
                 "creation_date": {
@@ -194,6 +182,18 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "quantity": {
+                    "type": "string"
+                }
+            }
+        },
+        "stock_handlers.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "status": {
+                    "type": "string"
+                },
+                "statusCode": {
                     "type": "integer"
                 }
             }

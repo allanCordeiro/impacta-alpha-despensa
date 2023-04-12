@@ -2,6 +2,7 @@ package balance_handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/usecase"
@@ -32,12 +33,18 @@ type Response struct {
 // @Router 				/api/products/{productID}/decrease [put]
 func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Request) {
 	var input usecase.UpdateProductInput
+	var outResponse Response
 	var req Input
 
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		if err.Error() != "EOF" {
+			log.Println(err)
+			outResponse.Status = "error"
+			outResponse.StatusCode = http.StatusBadRequest
+			outResponse.Data = "unrecognized request format"
+			_ = json.NewEncoder(w).Encode(&outResponse)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -52,8 +59,16 @@ func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Req
 	uc := usecase.NewProductBalanceUpdateUseCase(h.ProductBalanceUow)
 	ouput, err := uc.Execute(input)
 	if err != nil {
+		log.Println(err)
+		outResponse.Status = "error"
+		outResponse.StatusCode = http.StatusBadRequest
+		outResponse.Data = "unrecognized request format"
+		_ = json.NewEncoder(w).Encode(&outResponse)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	_ = json.NewEncoder(w).Encode(&ouput)
+	outResponse.Status = "success"
+	outResponse.StatusCode = http.StatusOK
+	outResponse.Data = &ouput
+	_ = json.NewEncoder(w).Encode(&outResponse)
 }

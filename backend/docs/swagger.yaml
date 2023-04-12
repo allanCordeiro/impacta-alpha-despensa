@@ -13,15 +13,7 @@ definitions:
       statusCode:
         type: integer
     type: object
-  stock_handlers.Response:
-    properties:
-      data: {}
-      status:
-        type: string
-      statusCode:
-        type: integer
-    type: object
-  usecase.CreateProductInput:
+  stock_handlers.RequestInput:
     properties:
       creation_date:
         type: string
@@ -30,6 +22,14 @@ definitions:
       name:
         type: string
       quantity:
+        type: string
+    type: object
+  stock_handlers.Response:
+    properties:
+      data: {}
+      status:
+        type: string
+      statusCode:
         type: integer
     type: object
   usecase.GetProductOutput:
@@ -120,7 +120,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/usecase.CreateProductInput'
+          $ref: '#/definitions/stock_handlers.RequestInput'
       produces:
       - application/json
       responses:
