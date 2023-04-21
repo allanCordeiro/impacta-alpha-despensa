@@ -14,9 +14,10 @@ func TestCreateBalance(t *testing.T) {
 
 	t.Run("Given a valid data when call save method should store data regularly", func(t *testing.T) {
 		expectedProdId := "id produto"
-		expectedAmount := 2
+		expectedAmount := 3
+		expectedRemainingQuantity := 1
 
-		balance := entity.NewProductBalance(expectedProdId, expectedAmount)
+		balance := entity.NewProductBalance(expectedProdId, expectedAmount, expectedRemainingQuantity)
 		err := balanceDb.Save(balance)
 		assert.Nil(t, err)
 
@@ -40,11 +41,12 @@ func TestGetBalanceList(t *testing.T) {
 	t.Run("Given a valid data when call get method should shown all corresponding data", func(t *testing.T) {
 		expectedProdId := "id produto"
 		expectedAmount := [2]int{6, 3}
+		expectedRemainingQuantity := [2]int{4, 1}
 
-		balance := entity.NewProductBalance(expectedProdId, expectedAmount[0])
+		balance := entity.NewProductBalance(expectedProdId, expectedAmount[0], expectedRemainingQuantity[0])
 		err := balanceDb.Save(balance)
 		assert.Nil(t, err)
-		balance = entity.NewProductBalance(expectedProdId, expectedAmount[1])
+		balance = entity.NewProductBalance(expectedProdId, expectedAmount[1], expectedRemainingQuantity[1])
 		err = balanceDb.Save(balance)
 		assert.Nil(t, err)
 

@@ -74,7 +74,7 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 			return ErrInternal
 		}
 
-		productBalance := entity.NewProductBalance(input.ProductID, input.Quantity)
+		productBalance := entity.NewProductBalance(input.ProductID, input.Quantity, product.Quantity)
 		err = productBalanceGateway.Save(productBalance)
 		if err != nil {
 			log.Printf("product save error: %s", err.Error())
