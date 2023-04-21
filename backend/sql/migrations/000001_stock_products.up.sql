@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS stock_products (
     name varchar(255) NOT NULL,
     creation_date date NOT NULL,
     quantity int NOT NULL,
-    expiration_date date NOT NULL
+    expiration_date date NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
