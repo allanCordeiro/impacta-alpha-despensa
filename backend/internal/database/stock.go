@@ -34,7 +34,7 @@ func (s *StockDb) Save(product *entity.Product) error {
 
 func (s *StockDb) GetByID(id string) (*entity.Product, error) {
 	product := &entity.Product{}
-	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE id = $1")
+	stmt, err := s.DB.Prepare("SELECT id, name, creation_date, quantity, expiration_date FROM stock_products WHERE id = $1 AND quantity > 0")
 	if err != nil {
 		return nil, err
 	}
