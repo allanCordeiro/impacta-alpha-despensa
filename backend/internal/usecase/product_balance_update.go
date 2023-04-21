@@ -56,6 +56,9 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 			}
 			return err
 		}
+		if product.Quantity == 0 {
+			return errors.New("product not found")
+		}
 
 		err = product.UpdateQuantity(input.Quantity)
 		if err != nil {
@@ -83,7 +86,29 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 	})
 
 	if err != nil {
-		return nil, err
+		//in case of any error but product not found try to get the remaining quantity to send it to the user
+		if err.Error() == "product not found" {
+			return nil, err
+		}
+		currentCtx := context.Background()
+		errUow := p.Uow.Do(ctx, func(_ *uow.Uow) error {
+			productGateway, trErr := p.getStockRepository(currentCtx)
+			if trErr != nil {
+				log.Printf("error retrieving product quantity: %s", trErr.Error())
+				return err
+			}
+			prd, idErr := productGateway.GetByID(input.ProductID)
+			if idErr != nil {
+				log.Printf("error retrieving product quantity: %s", idErr.Error())
+				return err
+			}
+			output.RemainingQuantity = prd.Quantity
+			return nil
+		})
+		if errUow != nil {
+			log.Printf("error in unit of work %s", errUow.Error())
+		}
+		return output, err
 	}
 	return output, nil
 }
