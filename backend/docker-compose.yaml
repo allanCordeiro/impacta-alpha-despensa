@@ -1,14 +1,31 @@
 version: '3'
 services:
     app:
-        build: .
+      build: .
 
-#  pgadmin:
-#    container_name: pgadmin4_container
-#    image: dpage/pgadmin4
-#    tty: true
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-#      PGADMIN_DEFAULT_PASSWORD: root
-#    ports:
-#      - "9000:80"
+    postgres:    
+        image: postgres:14.1-alpine
+        restart: always
+        tty: true
+        ports:
+        - "5432:5432"
+        expose:
+        - 5432
+        volumes:
+        - .data:/var/lib/postgresql/data
+        environment:
+        - POSTGRES_USER=dbuser
+        - POSTGRES_PASSWORD=bdpassword
+        - POSTGRES_DB=despensa
+
+    pgadmin:
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4
+        tty: true
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: root
+        ports:
+            - "9000:80"
+        depends_on:
+            - postgres

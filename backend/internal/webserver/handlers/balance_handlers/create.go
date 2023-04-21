@@ -61,10 +61,24 @@ func (h *BalanceHandler) CreateProductBalance(w http.ResponseWriter, r *http.Req
 	if err != nil {
 		log.Println(err)
 		outResponse.Status = "error"
+		if err == usecase.ErrInternal {
+			outResponse.StatusCode = http.StatusInternalServerError
+			outResponse.Data = "internal server error. please reach out support team"
+			w.WriteHeader(http.StatusBadRequest)
+			_ = json.NewEncoder(w).Encode(&outResponse)
+			return
+		}
+		if err.Error() == "product not found" {
+			outResponse.StatusCode = http.StatusNotFound
+			outResponse.Data = err.Error()
+			w.WriteHeader(http.StatusNotFound)
+			_ = json.NewEncoder(w).Encode(&outResponse)
+			return
+		}
 		outResponse.StatusCode = http.StatusBadRequest
-		outResponse.Data = "unrecognized request format"
-		_ = json.NewEncoder(w).Encode(&outResponse)
+		outResponse.Data = err.Error()
 		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(&outResponse)
 		return
 	}
 	outResponse.Status = "success"

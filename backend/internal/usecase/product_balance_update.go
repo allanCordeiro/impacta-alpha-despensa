@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"log"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/entity"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/domain/gateway"
@@ -21,6 +23,10 @@ type ProductBalanceUpdateUseCase struct {
 	Uow uow.UowInterface
 }
 
+var (
+	ErrInternal = errors.New("internal error")
+)
+
 func NewProductBalanceUpdateUseCase(uow uow.UowInterface) *ProductBalanceUpdateUseCase {
 	return &ProductBalanceUpdateUseCase{
 		Uow: uow,
@@ -34,31 +40,45 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 	err := p.Uow.Do(ctx, func(_ *uow.Uow) error {
 		stockGateway, err := p.getStockRepository(ctx)
 		if err != nil {
-			return err
+			log.Printf("stock gateway instantiate error: %s", err.Error())
+			return ErrInternal
 		}
 		productBalanceGateway, err := p.getProductBalanceRepository(ctx)
 		if err != nil {
-			return err
+			log.Printf("product balance gateway instantiate error: %s", err.Error())
+			return ErrInternal
 		}
 
 		product, err := stockGateway.GetByID(input.ProductID)
 		if err != nil {
+			if err.Error() == "sql: no rows in result set" {
+				return errors.New("product not found")
+			}
 			return err
+		}
+		if product.Quantity == 0 {
+			return errors.New("product not found")
 		}
 
 		err = product.UpdateQuantity(input.Quantity)
 		if err != nil {
-			return err
+			if err == entity.ErrInsufficientStock {
+				return err
+			}
+			log.Printf("update quantity error: %s", err.Error())
+			return ErrInternal
 		}
 		err = stockGateway.UpdateQuantity(product)
 		if err != nil {
-			return err
+			log.Printf("update quantity database error: %s", err.Error())
+			return ErrInternal
 		}
 
-		productBalance := entity.NewProductBalance(input.ProductID, input.Quantity)
+		productBalance := entity.NewProductBalance(input.ProductID, input.Quantity, product.Quantity)
 		err = productBalanceGateway.Save(productBalance)
 		if err != nil {
-			return err
+			log.Printf("product save error: %s", err.Error())
+			return ErrInternal
 		}
 
 		output.RemainingQuantity = product.Quantity
@@ -66,18 +86,28 @@ func (p *ProductBalanceUpdateUseCase) Execute(input UpdateProductInput) (*Update
 	})
 
 	if err != nil {
-		ctx := context.Background()
-		stockGateway, errGetQty := p.getStockRepository(ctx)
-		if errGetQty != nil {
-			return nil, errGetQty
+		//in case of any error but product not found try to get the remaining quantity to send it to the user
+		if err.Error() == "product not found" {
+			return nil, err
 		}
-
-		product, errGetQty := stockGateway.GetByID(input.ProductID)
-		if errGetQty != nil {
-			return nil, errGetQty
+		currentCtx := context.Background()
+		errUow := p.Uow.Do(ctx, func(_ *uow.Uow) error {
+			productGateway, trErr := p.getStockRepository(currentCtx)
+			if trErr != nil {
+				log.Printf("error retrieving product quantity: %s", trErr.Error())
+				return err
+			}
+			prd, idErr := productGateway.GetByID(input.ProductID)
+			if idErr != nil {
+				log.Printf("error retrieving product quantity: %s", idErr.Error())
+				return err
+			}
+			output.RemainingQuantity = prd.Quantity
+			return nil
+		})
+		if errUow != nil {
+			log.Printf("error in unit of work %s", errUow.Error())
 		}
-
-		output.RemainingQuantity = product.Quantity
 		return output, err
 	}
 	return output, nil
