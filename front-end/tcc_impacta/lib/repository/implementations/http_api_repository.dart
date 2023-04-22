@@ -21,18 +21,39 @@ class HttpApiRepository with ChangeNotifier {
 
   Future<void> addItem(ItemModel item) async {
     try {
-      final response =
-          await http.post(Uri.parse('https://despensa.onrender.com/api/stock'),
-              body: json.encode({
-                "creation_date": item.creationDate,
-                "expiration_date": item.expirationDate,
-                "name": item.name,
-                "quantity": item.quantity,
-              }));
+      final response = await http.post(
+        Uri.parse('https://despensa.onrender.com/api/stock'),
+        body: json.encode(
+          {
+            "creation_date": item.creationDate,
+            "expiration_date": item.expirationDate,
+            "name": item.name,
+            "quantity": item.quantity,
+          },
+        ),
+      );
       final responseData = json.decode(response.body);
       final newItem = ItemModel.fromJson(responseData);
       _items.add(newItem);
       notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> removeItem(String id) async {
+    try {
+      var request = http.Request(
+        'PUT',
+        Uri.parse('https://despensa.onrender.com/api/products/$id/decrease'),
+      );
+      request.body = '''''';
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        print(await response.stream.bytesToString());
+      } else {
+        print(response.reasonPhrase);
+      }
     } catch (e) {
       print(e);
     }
