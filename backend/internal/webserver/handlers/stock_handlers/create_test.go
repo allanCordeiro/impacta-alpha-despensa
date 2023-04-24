@@ -187,7 +187,7 @@ func TestStockHandler_CreateProduct(t *testing.T) {
 		assert.Nil(t, err)
 
 		postHandler.CreateProduct(response, request)
-		body, err := io.ReadAll(response.Body)
+		body, _ := io.ReadAll(response.Body)
 		err = json.Unmarshal(body, &received)
 		assert.Nil(t, err)
 		assert.Equal(t, http.StatusInternalServerError, response.Code)
