@@ -9,7 +9,6 @@ Projeto do grupo `Alpha` da turma do 5o semestre em ADS da Faculdade Impacta.
 
 O arquivo `docker-compose.yaml` possui uma instância local de um banco de dados Postgres. Para executar manualmente:
 
-- Criar um arquivo `.env` à partir do `env.example`
 - Executar `docker-compose up -d` na raiz do backend
 - Os endpoints deverão estar disponíveis no http://localhost:8000/
 - O swagger com os endpoints e respectivos contratos estão em http://localhost:8000/swagger/
