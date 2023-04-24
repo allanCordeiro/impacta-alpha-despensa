@@ -38,6 +38,11 @@ func (p *ProductStatisticsGetUseCase) Execute() GetStatisticsOutput {
 	entities, err := p.StockGateway.GetAllProducts()
 	if err != nil {
 		log.Println(err)
+		return GetStatisticsOutput{
+			MinimalQuantity:  p.MinimalQuantity,
+			AffectedProducts: 0,
+			ProductList:      []ProductOutput{},
+		}
 	}
 
 	validProducts := getValidProducts(entities)

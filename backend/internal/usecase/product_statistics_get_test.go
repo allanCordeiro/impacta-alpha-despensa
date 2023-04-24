@@ -11,21 +11,27 @@ import (
 
 func TestGetProductStatistics_Execute(t *testing.T) {
 	m := &mocks.StockGatewayMock{}
-
 	productList := []entity.Product{
 		{
 			ID:             "1",
 			Name:           "produto 1",
 			CreationDate:   time.Now(),
 			ExpirationDate: time.Now().Add(time.Hour * 24 * 5),
-			Quantity:       3,
+			Quantity:       1,
 		},
 		{
 			ID:             "2",
 			Name:           "produto 2",
 			CreationDate:   time.Now(),
 			ExpirationDate: time.Now().Add(time.Hour * 24 * 5),
-			Quantity:       2,
+			Quantity:       1,
+		},
+		{
+			ID:             "3",
+			Name:           "produto 3",
+			CreationDate:   time.Now(),
+			ExpirationDate: time.Now().Add(time.Hour * 24 * 5),
+			Quantity:       5,
 		},
 	}
 

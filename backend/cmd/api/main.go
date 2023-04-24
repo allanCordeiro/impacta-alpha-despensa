@@ -73,6 +73,7 @@ func main() {
 	r.Route("/api/stock", func(r chi.Router) {
 		r.Post("/", stockHandler.CreateProduct)
 		r.Get("/", stockHandler.GetProducts)
+		r.Get("/statistics", stockHandler.GetStatistics)
 	})
 	r.Route("/api/products/{productID}", func(r chi.Router) {
 		r.Put("/decrease", productBalancerHandler.CreateProductBalance)
