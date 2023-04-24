@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
@@ -69,6 +70,13 @@ func main() {
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+
+	minQuantity, err := strconv.Atoi(getEnvConfig("MINIMAL_QUANTITY"))
+	if err != nil {
+		minQuantity = 0
+	}
+
+	r.Use(middleware.WithValue("min-quantity", minQuantity))
 	//handlers
 	r.Route("/api/stock", func(r chi.Router) {
 		r.Post("/", stockHandler.CreateProduct)

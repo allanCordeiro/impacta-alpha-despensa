@@ -16,10 +16,11 @@ import (
 // @Failure 			500	{object}	Response
 // @Router 				/api/stock/statistics [get]
 func (h *StockHandler) GetStatistics(w http.ResponseWriter, r *http.Request) {
+	minimalQuantity := r.Context().Value("min-quantity").(int)
 	var output usecase.GetStatisticsOutput
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	uc := usecase.NewProductStatisticsGetUseCase(h.StockGateway, 1)
+	uc := usecase.NewProductStatisticsGetUseCase(h.StockGateway, minimalQuantity)
 	output = uc.Execute()
 
 	_ = json.NewEncoder(w).Encode(output)

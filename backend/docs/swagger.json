@@ -139,6 +139,32 @@
                     }
                 }
             }
+        },
+        "/api/stock/statistics": {
+            "get": {
+                "description": "Get statistics of how many products are below the minimal quantity in stock",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "stock"
+                ],
+                "summary": "Get Products statistics",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/usecase.GetStatisticsOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/stock_handlers.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -207,6 +233,34 @@
                     "type": "string"
                 },
                 "quantity": {
+                    "type": "string"
+                }
+            }
+        },
+        "usecase.GetStatisticsOutput": {
+            "type": "object",
+            "properties": {
+                "affected_products": {
+                    "type": "integer"
+                },
+                "minimal_quantity": {
+                    "type": "integer"
+                },
+                "product_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/usecase.ProductOutput"
+                    }
+                }
+            }
+        },
+        "usecase.ProductOutput": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }

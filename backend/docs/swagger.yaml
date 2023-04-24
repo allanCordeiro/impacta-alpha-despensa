@@ -45,6 +45,24 @@ definitions:
       quantity:
         type: string
     type: object
+  usecase.GetStatisticsOutput:
+    properties:
+      affected_products:
+        type: integer
+      minimal_quantity:
+        type: integer
+      product_list:
+        items:
+          $ref: '#/definitions/usecase.ProductOutput'
+        type: array
+    type: object
+  usecase.ProductOutput:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -137,6 +155,24 @@ paths:
           schema:
             $ref: '#/definitions/stock_handlers.Response'
       summary: Create Product
+      tags:
+      - stock
+  /api/stock/statistics:
+    get:
+      description: Get statistics of how many products are below the minimal quantity
+        in stock
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usecase.GetStatisticsOutput'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/stock_handlers.Response'
+      summary: Get Products statistics
       tags:
       - stock
 swagger: "2.0"
