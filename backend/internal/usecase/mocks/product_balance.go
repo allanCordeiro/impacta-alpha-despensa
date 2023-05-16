@@ -18,3 +18,8 @@ func (m *ProductBalance) GetByProductId(productId string) ([]entity.ProductBalan
 	args := m.Called(productId)
 	return args.Get(0).([]entity.ProductBalance), args.Error(1)
 }
+
+func (m *ProductBalance) GetAllProductsBalance() ([]entity.ProductBalance, error) {
+	args := m.Called()
+	return args.Get(0).([]entity.ProductBalance), args.Error(1)
+}

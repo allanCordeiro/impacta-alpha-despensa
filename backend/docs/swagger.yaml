@@ -74,6 +74,35 @@ info:
   title: Despensa Faculdade Impacta's Project
   version: "1.0"
 paths:
+  /api/products/{productID}/balance:
+    get:
+      consumes:
+      - application/json
+      description: Get product history of reductions
+      parameters:
+      - description: product identifier
+        in: path
+        name: productID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+      summary: Get Product Balance
+      tags:
+      - products
   /api/products/{productID}/decrease:
     put:
       consumes:

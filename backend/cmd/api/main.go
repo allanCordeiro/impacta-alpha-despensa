@@ -10,6 +10,7 @@ import (
 
 	"github.com/AllanCordeiro/impacta-alpha-despensa/docs"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/database"
+	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/balance_handlers"
 	balancehandlers "github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/balance_handlers"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/internal/webserver/handlers/stock_handlers"
 	"github.com/AllanCordeiro/impacta-alpha-despensa/pkg/uow"
@@ -67,6 +68,9 @@ func main() {
 
 	productBalancerHandler := balancehandlers.NewProductBalance(uow)
 
+	productBalanceDB := database.NewProductBalanceDB(db)
+	producBalancerHandlerWithGateway := balance_handlers.NewProductBalanceWithGateway(productBalanceDB)
+
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -83,8 +87,10 @@ func main() {
 		r.Get("/", stockHandler.GetProducts)
 		r.Get("/statistics", stockHandler.GetStatistics)
 	})
+
 	r.Route("/api/products/{productID}", func(r chi.Router) {
 		r.Put("/decrease", productBalancerHandler.CreateProductBalance)
+		r.Get("/balance", producBalancerHandlerWithGateway.GetProductBalance)
 	})
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)

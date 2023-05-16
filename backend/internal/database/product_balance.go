@@ -48,3 +48,22 @@ func (p *ProductBalanceDB) GetByProductId(productId string) ([]entity.ProductBal
 	}
 	return productsBalance, nil
 }
+
+func (p *ProductBalanceDB) GetAllProductsBalance() ([]entity.ProductBalance, error) {
+	rows, err := p.DB.Query("SELECT product_id, deducted_amount, remaining_quantity, deducted_date FROM product_balance")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var productsBalance []entity.ProductBalance
+	for rows.Next() {
+		var prod entity.ProductBalance
+		err = rows.Scan(&prod.ProductID, &prod.DeductedAmount, &prod.RemainingQuantity, &prod.DeductedDate)
+		if err != nil {
+			return nil, err
+		}
+		productsBalance = append(productsBalance, prod)
+	}
+	return productsBalance, nil
+}
