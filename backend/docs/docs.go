@@ -21,6 +21,50 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/products/{productID}/balance": {
+            "get": {
+                "description": "Get product history of reductions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Get Product Balance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product identifier",
+                        "name": "productID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/balance_handlers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/products/{productID}/decrease": {
             "put": {
                 "description": "Create product stock transactions",
