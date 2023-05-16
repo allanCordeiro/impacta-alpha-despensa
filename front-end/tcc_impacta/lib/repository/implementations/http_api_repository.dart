@@ -8,9 +8,19 @@ import '../../model/item_model.dart';
 class HttpApiRepository with ChangeNotifier {
   final List<ItemModel> _items = [];
   final String _baseUrl = 'https://despensa.onrender.com/api/stock';
-
+  
   Future<dynamic> getList() async {
     var url = Uri.parse(_baseUrl);
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Não foi possível carregar a lista');
+    }
+  }
+
+  Future<dynamic> getStatistics() async {
+   var url = Uri.parse('https://despensa.onrender.com/api/stock/statistics');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
