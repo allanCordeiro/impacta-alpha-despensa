@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
 
-import '../provider/item.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:tcc_impacta/page/statistics_list.dart';
+
 import '../repository/implementations/http_api_repository.dart';
 import '../routes/app_routes.dart';
 
@@ -13,14 +15,100 @@ class ListItems extends StatefulWidget {
 }
 
 class _ListItemsState extends State<ListItems> {
+  int _notificationCount = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getStatistics();
+  }
+
+  Future<void> getStatistics() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http
+          .get(Uri.parse('https://despensa.onrender.com/api/stock/statistics'));
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final affectedProducts = jsonResponse['affected_products'];
+        setState(() {
+          _notificationCount = affectedProducts;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("So tem 1"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Falha ao carregar dados do servidor')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Ocorreu um erro ao obter as estatísticas')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    ItemProvider items = Provider.of<ItemProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Itens'),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ListStatistics(),
+                    ),
+                  );
+                },
+              ),
+              Positioned(
+                right: 3,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 12,
+                    minHeight: 12,
+                  ),
+                  child: Text(
+                    '$_notificationCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: const FutureListBuild(),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : const FutureListBuild(),
     );
   }
 }
@@ -78,15 +166,6 @@ class _FutureListBuildState extends State<FutureListBuild> {
                         children: [
                           Row(
                             children: [
-                              // IconButton(
-                              //   onPressed: () async {
-                              //     await client
-                              //         .removeItem(snapshot.data[index]['id']);
-                              //     setState(() {});
-                              //   },
-                              //   icon: const Icon(Icons.edit_square),
-                              //   color: Colors.orange,
-                              // ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 6.0),
@@ -100,6 +179,12 @@ class _FutureListBuildState extends State<FutureListBuild> {
                               await client
                                   .removeItem(snapshot.data[index]['id']);
                               setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Item excluído com sucesso!"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                             },
                             icon: const Icon(Icons.delete),
                             color: Colors.red,
