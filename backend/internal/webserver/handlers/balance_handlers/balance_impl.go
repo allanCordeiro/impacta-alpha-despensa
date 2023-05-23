@@ -15,10 +15,12 @@ func NewProductBalance(uow uow.UowInterface) *BalanceHandler {
 
 type BalanceHandlerWithGateway struct {
 	ProductBalanceGateway gateway.ProductBalanceGateway
+	StockGateway          gateway.StockGateway
 }
 
-func NewProductBalanceWithGateway(balanceGateway gateway.ProductBalanceGateway) *BalanceHandlerWithGateway {
+func NewProductBalanceWithGateway(balanceGateway gateway.ProductBalanceGateway, stockGateway gateway.StockGateway) *BalanceHandlerWithGateway {
 	return &BalanceHandlerWithGateway{
 		ProductBalanceGateway: balanceGateway,
+		StockGateway:          stockGateway,
 	}
 }

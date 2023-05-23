@@ -69,7 +69,7 @@ func main() {
 	productBalancerHandler := balancehandlers.NewProductBalance(uow)
 
 	productBalanceDB := database.NewProductBalanceDB(db)
-	producBalancerHandlerWithGateway := balance_handlers.NewProductBalanceWithGateway(productBalanceDB)
+	producBalancerHandlerWithGateway := balance_handlers.NewProductBalanceWithGateway(productBalanceDB, stockDB)
 
 	docs.SwaggerInfo.Host = getEnvConfig("SWAGGER_HOST")
 	r := chi.NewRouter()
@@ -88,6 +88,9 @@ func main() {
 		r.Get("/statistics", stockHandler.GetStatistics)
 	})
 
+	r.Route("/api/products/balance", func(r chi.Router) {
+		r.Get("/", producBalancerHandlerWithGateway.GetBalance)
+	})
 	r.Route("/api/products/{productID}", func(r chi.Router) {
 		r.Put("/decrease", productBalancerHandler.CreateProductBalance)
 		r.Get("/balance", producBalancerHandlerWithGateway.GetProductBalance)
