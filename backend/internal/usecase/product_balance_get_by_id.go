@@ -45,7 +45,7 @@ func (u *ProductBalanceGetByIDUseCase) Execute(productID string) *ProductBalance
 		var balanceItem OperationList
 		balanceItem.DeductedQuantity = list.DeductedAmount
 		balanceItem.RemainingQuantity = list.RemainingQuantity
-		balanceItem.OperationDate = list.DeductedDate.Format("2006-01-02 15:04:05")
+		balanceItem.OperationDate = list.DeductedDate.Format("02-01-2006 15:04:05")
 
 		balance = append(balance, balanceItem)
 	}
