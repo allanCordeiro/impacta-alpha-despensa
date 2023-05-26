@@ -55,7 +55,7 @@ func TestGetProductBalance(t *testing.T) {
 		balanceMock.On("GetAllProductsBalance", mock.Anything).Return(balance, nil)
 		expectedLenght := 3
 		expectedWeekAgoLenght := 2
-		exepectedWeekAgoDate := time.Now().Add(-time.Hour * 24 * 5).Format("2006-01-02")
+		exepectedWeekAgoDate := time.Now().Add(-time.Hour * 24 * 5).Format("02-01-2006")
 
 		uc := NewProductBalanceUseCase(balanceMock, stockMock)
 		output := uc.Execute()
