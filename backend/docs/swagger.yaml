@@ -138,6 +138,29 @@ paths:
       summary: Create Product Balance
       tags:
       - products
+  /api/products/balance:
+    get:
+      consumes:
+      - application/json
+      description: Get all balance history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/balance_handlers.Response'
+      summary: Get All Products Balance
+      tags:
+      - products
   /api/stock:
     get:
       description: Get the list of all available products
