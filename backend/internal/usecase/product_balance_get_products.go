@@ -39,7 +39,7 @@ func (u *ProductBalanceUseCase) Execute() ProductsBalanceOutput {
 	var keys []string
 
 	for _, balance := range entities {
-		date := balance.DeductedDate.Format("2006-01-02")
+		date := balance.DeductedDate.Format("02-01-2006")
 
 		productHistory := ProductList{
 			Name:              productList[balance.ProductID],
