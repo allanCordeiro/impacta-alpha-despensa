@@ -38,7 +38,6 @@ func (h *BalanceHandlerWithGateway) GetProductBalance(w http.ResponseWriter, r *
 	output := uc.Execute(input.ProductID)
 	if len(output.BalanceList) == 0 {
 		w.WriteHeader(http.StatusNotFound)
-		_ = json.NewEncoder(w).Encode(&[]OperationList{})
 		return
 	}
 
