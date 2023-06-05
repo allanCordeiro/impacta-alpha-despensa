@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tcc_impacta/page/balance_iten_page.dart';
 import 'package:tcc_impacta/page/statistics_list.dart';
 
 import '../repository/implementations/http_api_repository.dart';
 import '../routes/app_routes.dart';
+import 'balance_products_page.dart';
 
 class ListItems extends StatefulWidget {
   const ListItems({Key? key}) : super(key: key);
@@ -66,6 +68,17 @@ class _ListItemsState extends State<ListItems> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Itens'),
+        leading: IconButton(
+          icon: const Icon(Icons.history),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>  const BalanceProducts(),
+              ),
+            );
+          },
+        ),
         actions: [
           Stack(
             children: [
@@ -81,7 +94,7 @@ class _ListItemsState extends State<ListItems> {
                 },
               ),
               Positioned(
-                right: 3,
+                right: 4,
                 child: Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
@@ -140,58 +153,70 @@ class _FutureListBuildState extends State<FutureListBuild> {
                 childAspectRatio: 4 / 3.4,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  elevation: 5,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          snapshot.data[index]['name'],
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                return GestureDetector(
+                  onTap: () async {
+                    String id = snapshot.data[index]['id'];
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BalanceItemPage(id: id), // Passar o ID aqui
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          snapshot.data[index]['expiration_date']
-                              .split('-')
-                              .reversed
-                              .join('-'),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 6.0),
-                                child: Text(snapshot.data[index]['quantity'],
-                                    style: const TextStyle(fontSize: 18)),
-                              ),
-                            ],
+                    );
+                  },
+                  child: Card(
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            snapshot.data[index]['name'],
+                            style: const TextStyle(fontSize: 20),
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              await client
-                                  .removeItem(snapshot.data[index]['id']);
-                              setState(() {});
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Item excluído com sucesso!"),
-                                  duration: Duration(seconds: 2),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            snapshot.data[index]['expiration_date']
+                                .split('-')
+                                .reversed
+                                .join('-'),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6.0),
+                                  child: Text(snapshot.data[index]['quantity'],
+                                      style: const TextStyle(fontSize: 18)),
                                 ),
-                              );
-                            },
-                            icon: const Icon(Icons.delete),
-                            color: Colors.red,
-                          )
-                        ],
-                      ),
-                    ],
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await client
+                                    .removeItem(snapshot.data[index]['id']);
+                                setState(() {});
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Item excluído com sucesso!"),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

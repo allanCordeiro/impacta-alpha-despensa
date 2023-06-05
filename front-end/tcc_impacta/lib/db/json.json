@@ -1,0 +1,498 @@
+{
+    "03-05-2023": [
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 7
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 6
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 5
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 4
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 3
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Skol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Schin",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Kaiser",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        }
+    ],
+    "04-05-2023": [
+        {
+            "name": "Itaipava",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Itaipava",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Bohemia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Bohemia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 34
+        },
+        {
+            "name": "Schin",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Bohemia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Kaiser",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 33
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 36
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 32
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 35
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 34
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 31
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 30
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 33
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 29
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 28
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 32
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 31
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 27
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 30
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 26
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 29
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 28
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 27
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 25
+        },
+        {
+            "name": "test",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "test",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        }
+    ],
+    "10-05-2023": [
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 24
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 26
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 23
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 22
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 25
+        },
+        {
+            "name": "Sabonete Lux",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "test",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Skol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        }
+    ],
+    "12-05-2023": [
+        {
+            "name": "Pizza Calabresa",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Pizza Calabresa",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Pizza Mussarela",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Pizza Mussarela",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Pizza Mussarela",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Pizza Marguerita",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Pizza Marguerita",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Itaipava",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Pizza Frango ",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        }
+    ],
+    "15-05-2023": [
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        }
+    ],
+    "19-05-2023": [
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 21
+        },
+        {
+            "name": "Crystal",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        }
+    ],
+    "20-04-2023": [
+        {
+            "name": "Massa Lasanha",
+            "deducted_quantity": 1,
+            "remaining_quantity": 4
+        },
+        {
+            "name": "Massa Lasanha",
+            "deducted_quantity": 1,
+            "remaining_quantity": 3
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 11
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 10
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 9
+        },
+        {
+            "name": "Massa Lasanha",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Massa Lasanha",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Massa Lasanha",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        }
+    ],
+    "21-04-2023": [
+        {
+            "name": "Batata inglesa",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Batata inglesa",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Batata inglesa",
+            "deducted_quantity": 1,
+            "remaining_quantity": 0
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 9
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 8
+        },
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 36
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 39
+        }
+    ],
+    "23-05-2023": [
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 24
+        }
+    ],
+    "24-04-2023": [
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 38
+        }
+    ],
+    "25-04-2023": [
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 7
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 6
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 5
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 4
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 3
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Cerveja Sol",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 8
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 7
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 6
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 5
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 4
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 3
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 2
+        },
+        {
+            "name": "Cerveja Heineken",
+            "deducted_quantity": 1,
+            "remaining_quantity": 1
+        },
+        {
+            "name": "Cerveja BadenBaden",
+            "deducted_quantity": 1,
+            "remaining_quantity": 37
+        }
+    ],
+    "27-04-2023": [
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 35
+        }
+    ],
+    "29-05-2023": [
+        {
+            "name": "Cerveja Patagonia",
+            "deducted_quantity": 1,
+            "remaining_quantity": 20
+        }
+    ]
+}
